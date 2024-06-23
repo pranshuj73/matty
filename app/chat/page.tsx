@@ -3,12 +3,24 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { SendHorizonalIcon, icons } from "lucide-react"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
 
 
-export default function Chat()  {
+export default async function Chat()  {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect("/login");
+  }
+
   return (
     <main className="h-screen">
-      <ChatNav />
+      <ChatNav user={user} />
       <section className="p-8 max-w-screen-md mx-auto h-full flex flex-col">
         <ScrollArea className="self-stretch place-self-stretch flex-1">
           <p className="opacity-50">✦ matty</p>

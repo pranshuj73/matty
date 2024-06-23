@@ -9,9 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
+import { User } from "@supabase/supabase-js";
 
 
-export default function ChatNav() {
+export default async function ChatNav({ user } : { user: User }) {
   return (
     <nav className="absolute right-5 top-5 flex gap-2">
       <Button variant={"outline"}>
@@ -22,7 +25,7 @@ export default function ChatNav() {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar className="rounded">
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src={user.user_metadata.picture || "https://github.com/shadcn.png"} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
@@ -33,6 +36,8 @@ export default function ChatNav() {
           <DropdownMenuItem>Billing</DropdownMenuItem>
           <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuItem>Subscription</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>Sign Out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </nav>
