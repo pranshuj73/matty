@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-import { SendHorizonalIcon } from "lucide-react"
+import { PlusIcon, SendHorizonalIcon } from "lucide-react"
 
-import ChatNav from "@/components/chat-nav"
 import DefaultChat from "./defaultChat"
+import ProfileMenu from "@/components/profileMenu"
 
 
 export default async function Chat()  {
@@ -32,7 +32,15 @@ export default async function Chat()  {
 
   return (
     <main className="h-screen">
-      <ChatNav user={user} />
+      <nav className="absolute right-5 top-5 flex gap-2">
+        <Button variant={"outline"}>
+          <PlusIcon className="mr-2" size={18} />
+          New Chat
+        </Button>
+
+        <ProfileMenu />
+      </nav>
+
       <section className="p-8 max-w-screen-md mx-auto h-full flex flex-col">
         <ScrollArea className="self-stretch place-self-stretch flex-1 text-wrap">
           <DefaultChat events={events} />
