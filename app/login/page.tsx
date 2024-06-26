@@ -1,16 +1,13 @@
 "use client"
 
 import { createClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function Login() {
-  const router = useRouter()
+  const origin = window.location.origin;
   const supabase = createClient();
 
-
   const signIn = async () => {
-
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
