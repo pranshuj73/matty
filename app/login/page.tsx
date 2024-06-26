@@ -1,16 +1,17 @@
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { headers } from "next/headers";
+"use client"
+
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function Login() {
+  const router = useRouter()
+  const supabase = createClient();
+
+
   const signIn = async () => {
-    "use server"
 
-    const supabase = createClient();
-    const origin = headers().get("origin");
-
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${origin}/auth/callback`,
@@ -20,22 +21,16 @@ export default function Login() {
           prompt: 'consent',
         },
       },
-    }).then((res) => {
-      // open in new tab
-      redirect(res.data.url!);
-    }
-    );
-    
-    if (error) {
-      console.log(error);
-      return redirect("/login");
-    }
+    });
+
+    if (error) console.error('Error signing in:', error.message);
   };
 
 
   return (
-    <form className="flex items-center justify-center w-full h-screen">
-      <Button variant={"outline"} formAction={signIn}>
+    <form className="flex flex-col gap-4 items-center justify-center w-full h-screen">
+      <h1>Sign In To Get Started</h1>
+      <Button variant={"outline"} onClick={() => signIn()}>
         Sign In with Google
       </Button>
     </form>

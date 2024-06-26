@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.27",
+    "@googleapis/calendar": "^9.7.5",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-menubar": "^1.1.1",
@@ -20,8 +21,9 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "googleapis": "^140.0.0",
     "lucide-react": "^0.394.0",
-    "next": "14.2.3",
+    "next": "14.2.4",
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-day-picker": "^8.10.1",

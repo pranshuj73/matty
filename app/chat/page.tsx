@@ -2,35 +2,42 @@ import ChatNav from "@/components/chat-nav"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { SendHorizonalIcon, icons } from "lucide-react"
+import { SendHorizonalIcon } from "lucide-react"
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
-
+import Events from "./events"
+import { listEvents } from "@/utils/calendar/event"
 
 export default async function Chat()  {
   const supabase = createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { session }} = await supabase.auth.getSession();
+  
+  if (!user || !session?.provider_token) {
     return redirect("/login");
   }
+
+  let events: any = []
+  try {
+    console.log('session.provider_token:', session.provider_token)
+    events = await listEvents(session.provider_token!);
+  } catch (error) {
+    console.error('Error fetching calendar events:', error);
+  }
+
 
   return (
     <main className="h-screen">
       <ChatNav user={user} />
       <section className="p-8 max-w-screen-md mx-auto h-full flex flex-col">
-        <ScrollArea className="self-stretch place-self-stretch flex-1">
-          <p className="opacity-50">✦ matty</p>
-          <p>here are your upcoming events:</p>
-          <ul>
-            <li className="my-2"><span className="text-blue-300">•</span> college <p className="opacity-50 text-xs">8:00 - 15:00 • in 6h</p></li>
-            <li className="my-2"><span className="text-yellow-300">•</span> meeting with client <p className="opacity-50 text-xs">17:00 - 17:30 • in 1d</p></li>
-            <li className="my-2"><span className="text-green-300">•</span> lunch with benny <p className="opacity-50 text-xs">12:00 - 13:00 • in 2d</p></li>
-          </ul>
-          <p className="mt-6">anything you'd like to schedule for today?</p>
+        <ScrollArea className="self-stretch place-self-stretch flex-1 text-wrap">
+          <p className="opacity-50">✦ Matty</p>
+          <p>Here are your upcoming events:</p>
+
+          <Events events={events} />
+          
+          <p className="mt-6">Anything you'd like to schedule for today?</p>
         </ScrollArea>
         <div className="flex gap-2">
           <Input className="focus-visible:bg-white/5 transition-colors duration-150 ease-in-out" />
