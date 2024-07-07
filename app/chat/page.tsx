@@ -1,30 +1,35 @@
 import { createClient } from "@/utils/supabase/server"
-import { listEvents } from "@/utils/calendar/event"
 import { redirect } from "next/navigation"
 
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
-import { PlusIcon, SendHorizonalIcon } from "lucide-react"
+import { PlusIcon } from "lucide-react"
 
-import DefaultChat from "./defaultChat"
+import BaseChat from "@/components/base-chat"
 import ProfileMenu from "@/components/profileMenu"
+import Chat from "@/components/chat"
+import { calendar_v3 } from "@googleapis/calendar"
 
 
-export default async function Chat()  {
+export default async function Page()  {
   const supabase = createClient();
-
   const { data: { user } } = await supabase.auth.getUser();
   const { data: { session }} = await supabase.auth.getSession();
+
+  const PROVIDER_TOKEN = session?.provider_token;
   
-  if (!user || !session?.provider_token) {
+  if (!user || !session || !PROVIDER_TOKEN) {
     return redirect("/login");
   }
 
-  let events: any = []
+  let events: calendar_v3.Schema$Event[] = []
+
   try {
-    events = await listEvents(session.provider_token!);
+    const response = await fetch(`http://localhost:3000/api/calendar/getEvents?token=${PROVIDER_TOKEN}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    events = await response.json();
   } catch (error) {
     console.error('Error fetching calendar events:', error);
   }
@@ -41,17 +46,9 @@ export default async function Chat()  {
         <ProfileMenu />
       </nav>
 
-      <section className="p-8 max-w-screen-md mx-auto h-full flex flex-col">
-        <ScrollArea className="self-stretch place-self-stretch flex-1 text-wrap">
-          <DefaultChat events={events} />
-        </ScrollArea>
-        <div className="flex gap-2">
-          <Input className="focus-visible:bg-white/5 transition-colors duration-150 ease-in-out" />
-          <Button variant={"outline"} size={"icon"}>
-            <SendHorizonalIcon size={18} />
-          </Button>
-        </div>
-      </section>
+      <Chat data={events} providerToken={PROVIDER_TOKEN}>
+        <BaseChat events={events} />
+      </Chat>
     </main>
   )
 } 

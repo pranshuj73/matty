@@ -4,7 +4,6 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 
 export default function Login() {
-  const origin = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://heymatty.vercel.app';
   const supabase = createClient();
 
   const signIn = async () => {

@@ -1,44 +1,6 @@
 import { calendar_v3, google } from "googleapis";
 
-
-export async function listEvents(provider_token: string) {
-  const oauth = new google.auth.OAuth2({
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    redirectUri: process.env.GOOGLE_REDIRECT_URI,
-  });
-  
-  // set access token
-  oauth.setCredentials({
-    access_token: provider_token,
-  });
-  
-  // create calendar client
-  const cal = google.calendar({ version: 'v3', auth: oauth });
-  
-  // get events
-  const res = await cal.events.list({
-    calendarId: 'primary',
-    timeMin: new Date().toISOString(),
-    showDeleted: false,
-    singleEvents: true,
-    maxResults: 10,
-    orderBy: 'startTime',
-  });
-
-  const events = res.data.items;
-
-  if (!events || events.length === 0) {
-    return [];
-  }
-
-  return events;
-}
-
-
 export function formatEvents(data: calendar_v3.Schema$Event[]) {
-  // create a new array of events with formatted timestamps
-
   const formattedEvents = data.map(event => {
     if (!event.start?.dateTime) {
       // convert date to dateTime
@@ -86,4 +48,17 @@ export function formatEvents(data: calendar_v3.Schema$Event[]) {
   })
 
   return formattedEvents;
+}
+
+export async function fetchEvents(token: string, maxTime?: string, minTime?: string) {
+  try {
+    const optionalParamsString = minTime ? `&minTime=${minTime}` : '' + maxTime ? `&maxTime=${maxTime}` : '';
+    const response = await fetch(`http://localhost:3000/api/calendar/getEvents?token=${token}` + optionalParamsString);
+    if (!response.ok) { throw new Error('Network response was not ok'); }
+    const events = await response.json();
+    return events.slice(0, 20);
+  } catch (error) {
+    console.error('Error fetching calendar events:', error);
+    return 'Error fetching calendar events';
+  }
 }
