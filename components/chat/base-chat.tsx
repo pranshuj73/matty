@@ -1,7 +1,7 @@
 import { timeUntilEvent } from "@/lib/utils";
 import { formatEvents } from "@/utils/calendar";
 import { calendar_v3 } from "@googleapis/calendar";
-import Events from "@/components/events";
+import Events from "@/components/chat/events";
 
 export default function BaseChat(data: { events: calendar_v3.Schema$Event[] }) {
   let events = formatEvents(data.events.slice(0, 5)) || [];

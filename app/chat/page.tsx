@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button"
 
 import { PlusIcon } from "lucide-react"
 
-import BaseChat from "@/components/base-chat"
-import ProfileMenu from "@/components/profileMenu"
-import Chat from "@/components/chat"
+import BaseChat from "@/components/chat/base-chat"
+import ProfileMenu from "@/components/chat/profileMenu"
+import Chat from "@/components/chat/chat"
 import { calendar_v3 } from "@googleapis/calendar"
+import DemoChat from "@/components/chat/demo-chat"
 
 
 export default async function Page()  {
@@ -47,7 +48,8 @@ export default async function Page()  {
       </nav>
 
       <Chat data={events} providerToken={PROVIDER_TOKEN}>
-        <BaseChat events={events} />
+        <BaseChat events={events.slice(0,5)} />
+        {/* <DemoChat /> */}
       </Chat>
     </main>
   )

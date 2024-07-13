@@ -1,4 +1,4 @@
-import Markdown from "@/components/markdown";
+import Markdown from "@/components/chat/markdown";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 function LinkRenderer(props: any) {

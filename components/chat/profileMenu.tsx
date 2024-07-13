@@ -30,7 +30,7 @@ export default function ProfileMenu() {
 
   if (!user) {
     return (
-      <div className="border-2 border-white/10 rounded h-10 w-10 flex items-center justify-center">
+      <div className="border-2 border-white/10 rounded-sm h-10 w-10 flex items-center justify-center">
         <UserIcon size={24} />
       </div>
     )
@@ -38,8 +38,8 @@ export default function ProfileMenu() {
   
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Avatar className="rounded">
+      <DropdownMenuTrigger className="rounded-sm">
+        <Avatar className="rounded-sm">
           <AvatarImage src={user.user_metadata.picture} />
           <AvatarFallback>{user.user_metadata.name}</AvatarFallback>
         </Avatar>

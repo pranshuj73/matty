@@ -7,21 +7,19 @@ import { Input } from '@/components/ui/input';
 import { SendHorizonalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React, { PropsWithChildren } from 'react';
-import Markdown from '@/components/markdown';
-import { ToolInvocation } from 'ai';
+import Markdown from '@/components/chat/markdown';
+import { ToolInvocation, tool } from 'ai';
 import Events from './events';
 import { fetchEvents } from '@/utils/calendar';
 
 export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema$Event[], providerToken: string }>) {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, addToolResult } = useChat({
     async onToolCall({ toolCall }) {
       switch (toolCall.toolName) {
         case 'listAllEvents':
-          console.log("hello")
           return fetchEvents(props.providerToken);
 
         case 'listEventsWithinRange': {
-          console.log("range event triggered")
           interface ListEventsArgs {
             minTime?: string;
             maxTime: string;
@@ -30,8 +28,6 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
           const minTime = (toolCall.args as ListEventsArgs)?.minTime;
           const maxTime = (toolCall.args as ListEventsArgs).maxTime;
   
-          console.log('minTime', minTime, 'maxTime', maxTime);
-
           if (minTime) {
             return fetchEvents(props.providerToken, maxTime, minTime);
           }
@@ -40,7 +36,6 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
         }
 
         default:
-          console.log(toolCall);
           return toolCall;
       }
     },
@@ -56,21 +51,20 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
             <Markdown content={m.content} />
             {m.toolInvocations?.map((toolInvocation: ToolInvocation) => {
             const toolCallId = toolInvocation.toolCallId;
-            console.log("toolInvocation", toolInvocation.toolName)
-            
-            
+            const addResult = (result: string) =>
+              addToolResult({ toolCallId, result });
             
             if (toolInvocation.toolName === 'listAllEvents' || toolInvocation.toolName === 'listEventsWithinRange') {
               if ('result' in toolInvocation) {
-
-                // check if error in result json
                 if (toolInvocation.result.error) {
                   return <p key={toolCallId}>Error fetching details...</p>;
                 }
-                
 
                 return (
-                  <Events key={toolCallId} events={toolInvocation.result} />
+                  <>
+                    <p>Here are your events:</p>
+                    <Events key={toolCallId} events={toolInvocation.result} />
+                  </>
                 );
               }
               
@@ -97,7 +91,7 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
           value={input}
           placeholder="Hey I'm planning to..."
           onChange={handleInputChange}
-          className="focus-visible:bg-white/5 transition-colors duration-150 ease-in-out"
+          className=" focus-visible:bg-accent transition-colors duration-150 ease-in-out"
         />
         <Button variant={"outline"} size={"icon"} type='submit'>
           <SendHorizonalIcon size={18} />
