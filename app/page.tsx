@@ -10,7 +10,7 @@ export default function Home() {
     <main className="flex flex-col items-center py-12 px-8">
       <Navbar />
       <Hero />
-      <div className="max-w-screen-lg w-full h-auto aspect-video" />
+      <div className="hidden md:block max-w-screen-lg w-full h-auto aspect-video" />
       <Features />
 
     </main>
