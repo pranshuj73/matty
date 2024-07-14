@@ -31,10 +31,11 @@ export default function Hero() {
           <Link className="group" href="https://tally.so/r/3xZ0Ak" target="_blank" rel="noreferrer noopener">Get Early Access <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" /></Link>
         </Button>
 
-        <div className="shadow-[0px_0px_300px_0px_#63b3edaa] top-full bg-black absolute mt-24 -z-10 hidden md:flex max-w-screen-lg w-full h-auto aspect-video flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">
+        <div className="shadow-[0px_0px_300px_0px_#63b3edaa] top-full left-0 bg-black absolute mt-24 -z-10 flex max-w-screen-lg w-full h-auto aspect-video flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">
           <Image src="/demo-screenshot.png" layout="fill" objectFit="contain" alt="Hero Illustration" />
           <BorderBeam size={250} duration={12} delay={9} />
         </div>
+          
       </div>
 
 
