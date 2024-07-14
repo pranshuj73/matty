@@ -15,7 +15,7 @@ export const TextGenerateEffect = ({ words, className, }: { words: string; class
   }, [scope.current]);
 
   return (
-    <motion.div ref={scope}>
+    <motion.div className="text-center" ref={scope}>
       {wordsArray.map((word, idx) => {
         return (
           <motion.span

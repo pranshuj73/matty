@@ -16,9 +16,9 @@ export const BorderBeam = ({
   size = 200,
   duration = 15,
   anchor = 90,
-  borderWidth = 1.5,
-  colorFrom = "#ffaa40",
-  colorTo = "#9c40ff",
+  borderWidth = 2,
+  colorFrom = "#fff",
+  colorTo = "#0284c7",
   delay = 0,
 }: BorderBeamProps) => {
   return (
