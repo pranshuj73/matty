@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Hi from "@/components/hi";
@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: "Matty",
   description: "Matty is your assistant for all things related to you calendar.",
 };
+
+export const viewport: Viewport = {
+  themeColor: 'black',
+  colorScheme: 'dark',
+
+}
 
 export default function RootLayout({
   children,
