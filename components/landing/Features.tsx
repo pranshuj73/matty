@@ -35,7 +35,7 @@ const features = [
     Icon: LanguagesIcon,
     name: "Natural Language Processing",
     description: "Communicate with Matty in natural language, making interactions simple and human-like.",
-    background: <img className="absolute top-1/2 -translate-y-3/4 lg:-translate-y-1/2 left-1/2 -translate-x-1/2 opacity-60" src="/landing/natural-language-processing.svg" />,
+    background: <img className="absolute top-1/2 -translate-y-3/4 lg:-translate-y-1/2 left-1/2 -translate-x-1/2 opacity-60 scale-75" src="/landing/natural-language-processing.svg" />,
     className: "md:col-start-1 md:col-end-2 lg:col-start-3 lg:col-end-3 lg:row-start-1 lg:row-end-2",
 },
 {
