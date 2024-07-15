@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Matty - Your Calendar Experience Redefined.",
   description: "Matty is your assistant for all things related to your calendar. It can help you manage your schedule, set reminders, and even conquer your goals.",
   openGraph: {
@@ -14,14 +14,15 @@ export const metadata = {
     url: "https://heymatty.vercel.app",
     title: "Matty - Your Calendar Experience Redefined.",
     description: "Matty is your assistant for all things related to your calendar. It can help you manage your schedule, set reminders, and even conquer your goals.",
-    image: "/og-image.png",
+    images: "/og-image.png",
   },
   twitter: {
     card: "summary_large_image",
-    url: "https://heymatty.vercel.app",
+    // site: "@heymatty",
+    creator: "@pranshuj73",
     title: "Matty - Your Calendar Experience Redefined.",
     description: "Matty is your assistant for all things related to your calendar. It can help you manage your schedule, set reminders, and even conquer your goals.",
-    image: "/og-image.png",
+    images: "/og-image.png",
   },
 };
 
