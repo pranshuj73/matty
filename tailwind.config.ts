@@ -67,7 +67,7 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        shimmer: {
+        "shimmer": {
           "0%, 90%, 100%": {
             "background-position": "calc(-100% - var(--shimmer-width)) 0",
           },
@@ -80,12 +80,17 @@ const config = {
             "offset-distance": "100%",
           },
         },
+        "wiggle": {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "shimmer": "shimmer 8s infinite",
-        "border-beam": "border-beam calc(var(--duration)*1s) infinite linear"
+        "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
+        "wiggle": 'wiggle 0.5s ease-in-out infinite',
       },
     },
   },

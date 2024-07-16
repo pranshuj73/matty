@@ -1,18 +1,32 @@
-import { CircleDashedIcon } from "lucide-react";
+import { ArrowRightIcon, CircleDashedIcon } from "lucide-react";
+import Image from "next/image";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function Navbar() {
   return (
     <header className="fixed top-5 left-1/2 -translate-x-1/2 z-50 max-w-screen-lg w-[90%] backdrop-blur-md bg-neutral-700/5 border-white/10 border-2 rounded-lg">
       <nav className="flex items-center justify-between px-4 py-2 mx-auto">
-        <a href="/" className="flex items-center justify-center gap-2"><CircleDashedIcon className="size-4" /> Matty</a>
-        <ul className="flex items-center space-x-2 text-xs md:text-sm">
-          <li className="bg-neutral-600 p-1 px-2 rounded-[8px]">
-            <a href="https://discord.gg/4g6gvp6Q9v" target="_blank" rel="noreferrer noopener">Discord</a>
-          </li>
-          <li className="bg-white text-black p-1 px-2 rounded-[8px]">
-            <a href="https://tally.so/r/3xZ0Ak" target="_blank" rel="noreferrer noopener">Early Access</a>
-          </li>
-        </ul>
+        <a href="/" className="flex items-center justify-center gap-2 font-medium">
+          <Image className="size-5" src="/logo.svg" alt="Matty Logo" width={32} height={32} />
+          Matty
+        </a>
+        <div className="flex items-center text-xs md:text-sm">
+          <Button className="group scale-90" variant={"secondary"} size={"sm"} asChild>
+            <Link href="https://discord.gg/4g6gvp6Q9v" target="_blank" rel="noreferrer noopener">
+              <svg className="mr-2 size-4 group-hover:animate-wiggle" xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" viewBox="0 0 16 16">
+                <path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612" />
+              </svg>
+              Join Discord
+            </Link>
+          </Button>
+          
+          <Button className="group scale-90" variant={"default"} size={"sm"} asChild>
+            <Link href="https://tally.so/r/3xZ0Ak" target="_blank" rel="noreferrer noopener">
+              Early Access <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+            </Link>
+          </Button>
+        </div>
       </nav>
     </header>
   );
