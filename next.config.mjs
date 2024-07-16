@@ -4,7 +4,7 @@ const nextConfig = {
     if (process.env.NODE_ENV === "production") {
       return [
         {
-          source: "/api/*",
+          source: "/api/:slug*",
           destination: '/404',
           permanent: true,
         }, {
