@@ -1,4 +1,30 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  redirects: () => {
+    if (process.env.NODE_ENV === "production") {
+      return [
+        {
+          source: "/api/*",
+          destination: '/404',
+          permanent: true,
+        }, {
+          source: "/chat",
+          destination: '/404',
+          permanent: true,
+        }, {
+          source: "/login",
+          destination: '/404',
+          permanent: true,
+        }, {
+          source: "/auth",
+          destination: '/404',
+          permanent: true,
+        }
+      ];
+    } else {
+      return []
+    }
+  },
+};
 
 export default nextConfig;

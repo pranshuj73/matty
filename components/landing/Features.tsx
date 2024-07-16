@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
  
 import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
-import Notifications from "../magicui/notifications";
+import Notifications from "@/components/magicui/notifications";
 
 const features = [
   {
@@ -49,7 +49,7 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="max-w-screen-lg flex flex-col items-center">
+    <section className="max-w-screen-lg flex flex-col items-center pb-12">
       <h2 className="text-4xl md:text-5xl font-semibold text-center">Your Calendar Experience Redefined.</h2>
 
       <BentoGrid className="md:grid-rows-2 lg:grid-rows-3 mt-16">
