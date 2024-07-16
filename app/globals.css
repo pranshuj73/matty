@@ -78,3 +78,23 @@
 .markdown > ul li p, ol li p {
   display: inline;
 }
+
+.fade-b-edge {
+  --mask: linear-gradient(to bottom, 
+  rgba(0,0,0, 1) 0,   rgba(0,0,0, 1) 40%, 
+  rgba(0,0,0, 0) 95%, rgba(0,0,0, 0) 0
+) 100% 50% / 100% 100% repeat-x;
+
+  -webkit-mask: var(--mask); 
+  mask: var(--mask);
+}
+
+.fade-t-edge {
+  --mask: linear-gradient(to top, 
+  rgba(0,0,0, 1) 0,   rgba(0,0,0, 1) 40%, 
+  rgba(0,0,0, 0) 95%, rgba(0,0,0, 0) 0
+) 100% 50% / 100% 100% repeat-x;
+
+  -webkit-mask: var(--mask); 
+  mask: var(--mask);
+}
