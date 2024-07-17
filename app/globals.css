@@ -98,3 +98,9 @@
   -webkit-mask: var(--mask); 
   mask: var(--mask);
 }
+
+.fade-radial {
+  --mask: radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%, transparent 0);
+  -webkit-mask: var(--mask); 
+  mask: var(--mask);
+}
