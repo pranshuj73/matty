@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Hi from "@/components/hi";
 import { cn } from "@/lib/utils";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,18 +34,14 @@ export const viewport: Viewport = {
 
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-
+export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
       <body className={cn(inter.className, "dark")}>
         <Hi />
         {children}
       </body>
+      <GoogleAnalytics gaId="G-VL8FFWGTBV" />
     </html>
   );
 }
