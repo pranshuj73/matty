@@ -51,7 +51,7 @@ export default function Login() {
         {/* back button */}
         <Button variant="outline" size={"sm"} className="absolute top-5 left-5 max-w-[250px] mt-8" asChild>
           <Link href="/" className="group">
-          <ChevronLeftIcon className="mr-1 size-4 group-hover:-translate-x-1 duration-300 transition-all ease-in-out" />
+            <ChevronLeftIcon className="mr-1 size-4 group-hover:-translate-x-1 duration-300 transition-all ease-in-out" />
             Back to Home
           </Link>
         </Button>

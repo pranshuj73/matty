@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import Image from "next/image";
+import { DISCORD_URL, WAITLIST_URL } from "@/lib/values";
 
 
 export default function Hero() {
@@ -16,7 +17,7 @@ export default function Hero() {
   return (
     <main className="relative flex flex-col items-center justify-center min-h-screen text-center">
       <div className="relative max-w-screen-lg flex flex-col items-center justify-center">
-        <Link href="https://discord.gg/4g6gvp6Q9v" className="group scale-75 md:scale-100 -mt-24 mb-2 rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800" target="_blank" rel="noreferrer noopener">
+        <Link href={DISCORD_URL} className="group scale-75 md:scale-100 -mt-24 mb-2 rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800" target="_blank" rel="noreferrer noopener">
           <AnimatedShinyText className="inline-flex text-sm items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
             <span>✨ Join The Discord Server</span>
             <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
@@ -28,7 +29,7 @@ export default function Hero() {
         </p>
 
         <Button className="px-8 mt-10" asChild>
-          <Link className="group" href="https://tally.so/r/3xZ0Ak" target="_blank" rel="noreferrer noopener">Get Early Access <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" /></Link>
+          <Link className="group" href={WAITLIST_URL} target="_blank" rel="noreferrer noopener">Get Early Access <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" /></Link>
         </Button>
 
         <div className="shadow-[0px_0px_300px_0px_#63b3edaa] top-full left-0 bg-black absolute mt-24 -z-10 flex max-w-screen-lg w-full h-auto aspect-video flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">
