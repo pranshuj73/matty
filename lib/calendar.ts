@@ -1,4 +1,9 @@
 import { calendar_v3, google } from "googleapis";
+import Fuse from 'fuse.js';
+import { generateText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai"
+
+const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export function formatEvents(data: calendar_v3.Schema$Event[]) {
   const formattedEvents = data.map(event => {
@@ -61,4 +66,57 @@ export async function fetchEvents(token: string, maxTime?: string, minTime?: str
     console.error('Error fetching calendar events:', error);
     return 'Error fetching calendar events';
   }
+}
+
+
+export async function findEventByName(eventName: string, question: string | undefined, token: string) {
+  const eventsObj = await await fetch(`http://localhost:3000/api/calendar/getEvents?token=${token}`);
+  const events = await eventsObj.json();
+
+  if (!events) { return 'Error fetching events'; }
+
+  console.log('Events:', events)
+  
+  console.log('Searching for event:', eventName);
+  // Fuzzy search
+  const fuse = new Fuse(events, {
+    keys: ['summary', 'description', 'location'],
+    threshold: 0.4, // Adjust this value to control the fuzziness
+
+  });
+
+  const fuzzyResults = fuse.search(eventName);
+  console.log("question", question);
+
+  console.log('Fuzzy results length:', fuzzyResults.length);
+
+  if (fuzzyResults.length > 0) {
+    const matchedEvents = JSON.stringify(fuzzyResults);
+    console.log('Fuzzy search results:', matchedEvents);
+
+    try {
+      const body = { question, eventName, matchedEvents };
+      
+      // post request to /api/chat/generate
+      const response = await fetch('http://localhost:3000/api/chat/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) { throw new Error('Network response was not ok'); }
+
+      const data = await response.json();
+      console.log('Data:', data);
+
+      return data.response;
+    } catch (error) {
+      console.error('Error generating text:', error);
+      return "An error occurred while processing your request. Please try again.";
+    }
+  }
+
+  return "Could not find details about the event you asked for. Please try again.";
 }

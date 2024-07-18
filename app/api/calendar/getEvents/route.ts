@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
 
   const response = await calendar.events.list({
     calendarId: 'primary',
-    timeMin: minTime ? new Date(minTime).toISOString() : new Date().toISOString(),
-    timeMax: maxTime ? new Date(maxTime).toISOString() : undefined,
+    timeMin: (minTime && minTime !== "undefined") ? new Date(minTime).toISOString() : new Date().toISOString(),
+    timeMax: (maxTime && maxTime !== "undefined") ? new Date(maxTime).toISOString() : undefined,
     showDeleted: false,
     singleEvents: true,
     maxResults: 100,

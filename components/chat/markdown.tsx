@@ -3,7 +3,7 @@ import remarkGfm from 'remark-gfm'
 
 function LinkRenderer(props: any) {
   return (
-    <a className='text-sky-300 underline underline-offset-2' href={props.href} target="_blank" rel="noreferrer noopener">
+    <a className='text-sky-300 border-b-2 pb-[1px] border-dashed border-sky-300' href={props.href} target="_blank" rel="noreferrer noopener">
       {props.children}
     </a>
   );

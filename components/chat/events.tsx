@@ -1,5 +1,5 @@
 import { timeUntilEvent } from "@/lib/utils"
-import { formatEvents } from "@/utils/calendar"
+import { formatEvents } from "@/lib/calendar"
 import { calendar_v3 } from "@googleapis/calendar"
 import { PropsWithChildren } from "react"
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"

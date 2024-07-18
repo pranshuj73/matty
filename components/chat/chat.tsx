@@ -6,33 +6,34 @@ import { calendar_v3 } from '@googleapis/calendar';
 import { Input } from '@/components/ui/input';
 import { SendHorizonalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import Markdown from '@/components/chat/markdown';
 import { ToolInvocation, tool } from 'ai';
 import Events from './events';
-import { fetchEvents } from '@/utils/calendar';
+import { fetchEvents, findEventByName } from '@/lib/calendar';
+
 
 export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema$Event[], providerToken: string }>) {
-  const { messages, input, handleInputChange, handleSubmit, addToolResult } = useChat({
-    async onToolCall({ toolCall }) {
+  interface ListEventsArgs { minTime?: string; maxTime?: string; eventName?: string;}
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    async onToolCall({ toolCall } : { toolCall: ToolInvocation }) {
       switch (toolCall.toolName) {
         case 'listAllEvents':
           return fetchEvents(props.providerToken);
 
         case 'listEventsWithinRange': {
-          interface ListEventsArgs {
-            minTime?: string;
-            maxTime: string;
-          }
-          
-          const minTime = (toolCall.args as ListEventsArgs)?.minTime;
-          const maxTime = (toolCall.args as ListEventsArgs).maxTime;
-  
-          if (minTime) {
-            return fetchEvents(props.providerToken, maxTime, minTime);
-          }
-  
+          const { minTime, maxTime } = toolCall.args as ListEventsArgs;
+          if (minTime) { return fetchEvents(props.providerToken, maxTime, minTime); }
           return fetchEvents(props.providerToken, maxTime);
+        }
+
+        case 'answerQuery': {
+          const { eventName } = toolCall.args as {eventName: string};
+          if (eventName) {
+            const answer = await findEventByName(eventName, input, props.providerToken);
+            return answer;  
+          }
         }
 
         default:
@@ -40,6 +41,8 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
       }
     },
   });
+
+  
 
   return (
     <section className="p-8 max-w-screen-md mx-auto h-full flex flex-col">
@@ -49,38 +52,22 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
           <div key={m.id} className="mb-5">
             <p className="opacity-50">{m.role === 'user' ? '• You' : '✦ Matty'}</p>
             <Markdown content={m.content} />
-            {m.toolInvocations?.map((toolInvocation: ToolInvocation) => {
-            const toolCallId = toolInvocation.toolCallId;
-            const addResult = (result: string) =>
-              addToolResult({ toolCallId, result });
             
-            if (toolInvocation.toolName === 'listAllEvents' || toolInvocation.toolName === 'listEventsWithinRange') {
-              if ('result' in toolInvocation) {
-                if (toolInvocation.result.error) {
-                  return <p key={toolCallId}>Error fetching details...</p>;
-                }
-
-                return (
-                  <>
-                    <p>Here are your events:</p>
-                    <Events key={toolCallId} events={toolInvocation.result} />
-                  </>
-                );
-              }
+            {m.toolInvocations?.map((toolInvocation: ToolInvocation) => {
+              const toolCallId = toolInvocation.toolCallId;
+              const toolName = toolInvocation.toolName;
               
-              return <p key={toolCallId}>Loading Events...</p>;
-            } else {
               if ('result' in toolInvocation) {
-                return (
-                  <div key={toolCallId}>
-                    Tool call {`${toolInvocation.toolName}: `}
-                    {toolInvocation.result}
-                  </div>
-                )
-              }
-              return <div key={toolCallId}>Calling {toolInvocation.toolName}...</div>;
-            }
+                if (toolInvocation.result.error) { return <p key={toolCallId}>Error fetching details...</p>; }
 
+                switch (toolName) {
+                  case 'listAllEvents':
+                  case 'listEventsWithinRange':
+                    return ( <> <p>Here are your events:</p> <Events key={toolCallId} events={toolInvocation.result} /> </> );
+                  case 'answerQuery':
+                    return <Markdown key={toolCallId} content={toolInvocation.result} />;
+                }
+              }
             })}
 
           </div>
@@ -89,7 +76,7 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
       <form className="flex gap-2 pt-4" onSubmit={handleSubmit}>
         <Input
           value={input}
-          placeholder="Hey I'm planning to..."
+          placeholder="Say Something..."
           onChange={handleInputChange}
           className=" focus-visible:bg-accent transition-colors duration-150 ease-in-out"
         />
