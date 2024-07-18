@@ -29,7 +29,18 @@ export async function POST(req: Request) {
         parameters: z.object({
           eventName: z.string().describe('The name or partial name of the event to get details for.'),
         }),
-      })
+      }),
+      scheduleEvent: tool({
+        description: `Schedule an event with a specific summary, start and end datetimes, and optional description, location and/or attendee list provided by the user.`,
+        parameters: z.object({
+          summary: z.string().describe('The name of the event to schedule.'),
+          description: z.string().optional().describe('The description of the event.'),
+          location: z.string().optional().describe('The location of the event. Could also be a meet or zoom link.'),
+          attendees: z.string().optional().describe('Comma separated list of attendee emails.'),
+          eventStartDateTime: z.string().describe('The start datetime of the event in ISO format.'),
+          eventEndDateTime: z.string().describe('The end datetime of the event in ISO format.'),
+        }),
+      }),
     }
   });
 

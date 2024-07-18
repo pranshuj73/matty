@@ -75,10 +75,6 @@ export async function findEventByName(eventName: string, question: string | unde
 
   if (!events) { return 'Error fetching events'; }
 
-  console.log('Events:', events)
-  
-  console.log('Searching for event:', eventName);
-  // Fuzzy search
   const fuse = new Fuse(events, {
     keys: ['summary', 'description', 'location'],
     threshold: 0.4, // Adjust this value to control the fuzziness
@@ -86,13 +82,9 @@ export async function findEventByName(eventName: string, question: string | unde
   });
 
   const fuzzyResults = fuse.search(eventName);
-  console.log("question", question);
-
-  console.log('Fuzzy results length:', fuzzyResults.length);
 
   if (fuzzyResults.length > 0) {
     const matchedEvents = JSON.stringify(fuzzyResults);
-    console.log('Fuzzy search results:', matchedEvents);
 
     try {
       const body = { question, eventName, matchedEvents };
@@ -109,7 +101,6 @@ export async function findEventByName(eventName: string, question: string | unde
       if (!response.ok) { throw new Error('Network response was not ok'); }
 
       const data = await response.json();
-      console.log('Data:', data);
 
       return data.response;
     } catch (error) {
@@ -119,4 +110,24 @@ export async function findEventByName(eventName: string, question: string | unde
   }
 
   return "Could not find details about the event you asked for. Please try again.";
+}
+
+export async function scheduleEvent( token: string, summary: string, eventStartDateTime: string, eventEndDateTime: string, description?: string, location?: string, attendees?: string) {
+  try {
+    const response = await fetch('http://localhost:3000/api/calendar/scheduleEvent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, summary, eventStartDateTime, eventEndDateTime, description, location, attendees }),
+    });
+    if (!response.ok) { throw new Error('Network response was not ok'); }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error('Error scheduling event:', error);
+    return 'Error scheduling event';
+  }
 }

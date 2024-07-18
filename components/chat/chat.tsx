@@ -10,7 +10,7 @@ import React, { PropsWithChildren, useState } from 'react';
 import Markdown from '@/components/chat/markdown';
 import { ToolInvocation, tool } from 'ai';
 import Events from './events';
-import { fetchEvents, findEventByName } from '@/lib/calendar';
+import { fetchEvents, findEventByName, scheduleEvent } from '@/lib/calendar';
 
 
 export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema$Event[], providerToken: string }>) {
@@ -34,6 +34,12 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
             const answer = await findEventByName(eventName, input, props.providerToken);
             return answer;  
           }
+        }
+
+        case 'scheduleEvent': {
+          const { summary, description, location, attendees, eventStartDateTime, eventEndDateTime } = toolCall.args as { summary: string, eventStartDateTime: string, eventEndDateTime: string, description?: string, location?: string, attendees?: string };
+          const response = await scheduleEvent(props.providerToken, summary, eventStartDateTime, eventEndDateTime, description, location, attendees);
+          return response;
         }
 
         default:
@@ -66,8 +72,12 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
                     return ( <> <p>Here are your events:</p> <Events key={toolCallId} events={toolInvocation.result} /> </> );
                   case 'answerQuery':
                     return <Markdown key={toolCallId} content={toolInvocation.result} />;
+                  case 'scheduleEvent':
+                    return (<> <p key={toolCallId}>Scheduled your event ✌️</p> <Events events={[toolInvocation.result]} /> </>);
                 }
               }
+
+              return <p>Calling {toolName}...</p>
             })}
 
           </div>
