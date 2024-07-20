@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -9,6 +9,7 @@ import { User } from "@supabase/supabase-js";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 import { UserIcon } from "lucide-react";
+import Link from "next/link";
 
 
 export default function ProfileMenu({credits} : {credits: number}) {
@@ -49,8 +50,8 @@ export default function ProfileMenu({credits} : {credits: number}) {
         <DropdownMenuLabel>Credits: {credits}</DropdownMenuLabel>
         <DropdownMenuItem disabled>Settings</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Privacy Policy</DropdownMenuItem>
-        <DropdownMenuItem>Terms & Conditions</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/privacy")}>Privacy Policy</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/terms")}>Terms & Conditions</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>

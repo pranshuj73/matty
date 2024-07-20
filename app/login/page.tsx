@@ -41,11 +41,11 @@ export default function Login() {
         </Button>
         <div className="mt-auto text-xs opacity-50 text-center">
           By continuing, you agree to our{" "}
-          <Link href="#" className="border-b border-white border-dashed pb-[2px]">
+          <Link href="/terms" className="border-b border-white border-dashed pb-[2px]">
             Terms of Service
           </Link>
           {" "} and {" "}
-          <Link href="#" className="border-b border-white border-dashed pb-[2px]">
+          <Link href="/privacy" className="border-b border-white border-dashed pb-[2px]">
             Privacy Policy
           </Link>
         </div>
