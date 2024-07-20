@@ -26,6 +26,9 @@ export const metadata: Metadata = {
     description: "Matty is your assistant for all things related to your calendar. It can help you manage your schedule, set reminders, and even conquer your goals.",
     images: "/og-image.png",
   },
+  verification: {
+    google: "LLvubD5cYRFrXmDjTvEGqnH0PRn4NWtrATqqoM5ig9k",
+  }
 };
 
 export const viewport: Viewport = {

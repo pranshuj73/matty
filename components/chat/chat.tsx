@@ -72,10 +72,11 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
 
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (credits < 1 || isLoading) { return; }
-      handleSubmit();
-    }
+    e.preventDefault();
+    fetchCredits();
+    if (credits < 1 || isLoading) { return; }
+    handleSubmit();
+  }
 
   
 
