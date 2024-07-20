@@ -23,6 +23,8 @@ export default async function Page()  {
     return redirect("/login");
   }
 
+  const credits = await supabase.from('users').select('credits').eq('id', user.id).single();
+
   let events: calendar_v3.Schema$Event[] = []
 
   try {
@@ -47,7 +49,7 @@ export default async function Page()  {
         <ProfileMenu />
       </nav>
 
-      <Chat data={events} providerToken={PROVIDER_TOKEN}>
+      <Chat data={events} providerToken={PROVIDER_TOKEN} user={user} credits={credits.data?.credits || 0}>
         <BaseChat events={events.slice(0,5)} />
         {/* <DemoChat /> */}
       </Chat>

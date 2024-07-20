@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^0.0.27",
+    "@ai-sdk/openai": "^0.0.37",
     "@googleapis/calendar": "^9.7.5",
     "@next/third-parties": "^14.2.5",
     "@radix-ui/react-avatar": "^1.1.0",
@@ -20,7 +20,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.5",
-    "ai": "^3.2.14",
+    "ai": "^3.2.31",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
