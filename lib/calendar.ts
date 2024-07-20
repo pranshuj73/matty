@@ -58,7 +58,7 @@ export function formatEvents(data: calendar_v3.Schema$Event[]) {
 export async function fetchEvents(token: string, maxTime?: string, minTime?: string) {
   try {
     const optionalParamsString = minTime ? `&minTime=${minTime}` : '' + maxTime ? `&maxTime=${maxTime}` : '';
-    const response = await fetch(`http://localhost:3000/api/calendar/getEvents?token=${token}` + optionalParamsString);
+    const response = await fetch(`${getURL()}/api/calendar/getEvents?token=${token}` + optionalParamsString);
     if (!response.ok) { throw new Error('Network response was not ok'); }
     const events = await response.json();
     return events.slice(0, 20);
@@ -70,7 +70,7 @@ export async function fetchEvents(token: string, maxTime?: string, minTime?: str
 
 
 export async function findEventByName(eventName: string, question: string | undefined, token: string) {
-  const eventsObj = await await fetch(`http://localhost:3000/api/calendar/getEvents?token=${token}`);
+  const eventsObj = await await fetch(`${getURL()}/api/calendar/getEvents?token=${token}`);
   const events = await eventsObj.json();
 
   if (!events) { return 'Error fetching events'; }
@@ -90,7 +90,7 @@ export async function findEventByName(eventName: string, question: string | unde
       const body = { question, eventName, matchedEvents };
       
       // post request to /api/chat/generate
-      const response = await fetch('http://localhost:3000/api/chat/generate', {
+      const response = await fetch(`${getURL()}/api/chat/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,14 +112,14 @@ export async function findEventByName(eventName: string, question: string | unde
   return "Could not find details about the event you asked for. Please try again.";
 }
 
-export async function scheduleEvent( token: string, summary: string, eventStartDateTime: string, eventEndDateTime: string, timezone: string, description?: string, location?: string, attendees?: string) {
+export async function scheduleEvent( token: string, summary: string, eventStartDateTime: string, eventEndDateTime: string, description?: string, location?: string, attendees?: string) {
   try {
-    const response = await fetch('http://localhost:3000/api/calendar/scheduleEvent', {
+    const response = await fetch(`${getURL()}/api/calendar/scheduleEvent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token, summary, eventStartDateTime, eventEndDateTime, timezone, description, location, attendees }),
+      body: JSON.stringify({ token, summary, eventStartDateTime, eventEndDateTime, description, location, attendees }),
     });
     if (!response.ok) { throw new Error('Network response was not ok'); }
 

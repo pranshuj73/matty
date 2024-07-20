@@ -6,15 +6,17 @@ import Link from "next/link";
 import Image from "next/image";
 import AnimatedShinyText from "@/components/magicui/animated-shiny-text";
 import { ChevronLeftIcon } from "lucide-react";
+import { getURL } from "@/lib/utils";
 
 export default function Login() {
   const supabase = createClient();
 
   const signIn = async () => {
+    console.log(getURL());
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${origin}/auth/callback`,
+        redirectTo: `${getURL()}/auth/callback`,
         scopes: 'https://www.googleapis.com/auth/calendar',
         queryParams: {
           access_type: 'offline',

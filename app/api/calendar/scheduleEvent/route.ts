@@ -1,10 +1,11 @@
+import { formatEvents } from '@/lib/calendar';
 import { calendar_v3 } from '@googleapis/calendar';
 import { google } from 'googleapis';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: any) {
   try {
-    const { token, summary, eventStartDateTime, eventEndDateTime, timezone, description, location, attendees } = await request.json();
+    const { token, summary, eventStartDateTime, eventEndDateTime, description, location, attendees } = await request.json();
 
     if (!token || typeof token !== 'string') {
       return NextResponse.json({ error: 'Invalid token' }, { status: 400 });
@@ -33,24 +34,21 @@ export async function POST(request: any) {
       'description': (description ? `${description} ` : " " )+ "✦ Created by Matty",
       'start': {
         'dateTime': eventStartDateTime,
-        'timeZone': timezone
+        'timeZone': "UTC"
       },
       'end': {
         'dateTime': eventEndDateTime,
-        'timeZone': timezone
+        'timeZone': "UTC"
       },
       'attendees': attendees ? attendees.split(',').map((email: string) => ({ email: email.trim() })) : undefined
     };
 
-    console.log('Event to be scheduled:', event);
     const response = await calendar.events.insert({
       calendarId: 'primary',
       requestBody: event,
     })
 
-    console.log(response.data)
-
-    return NextResponse.json(response.data);
+    return NextResponse.json(formatEvents([response.data]));
   } catch (error) {
     console.error('Error in POST handler:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

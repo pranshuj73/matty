@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import React, { PropsWithChildren, use, useEffect, useState } from 'react';
 import Markdown from '@/components/chat/markdown';
 import { ToolInvocation, tool } from 'ai';
-import Events from './events';
+import Events, { EventItem } from './events';
 import { fetchEvents, findEventByName, scheduleEvent } from '@/lib/calendar';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
@@ -57,7 +57,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
 
         case 'scheduleEvent': {
           const { summary, description, location, attendees, eventStartDateTime, eventEndDateTime } = toolCall.args as { summary: string, eventStartDateTime: string, eventEndDateTime: string, description?: string, location?: string, attendees?: string };
-          const response = await scheduleEvent(props.providerToken, summary, eventStartDateTime, eventEndDateTime, Intl.DateTimeFormat().resolvedOptions().timeZone, description, location, attendees);
+          const response = await scheduleEvent(props.providerToken, summary, eventStartDateTime, eventEndDateTime, description, location, attendees);
           return response;
         }
 
@@ -81,7 +81,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
 
   return (
     <section className={`p-8 max-w-screen-md mx-auto h-full flex flex-col`}>
-      <nav className="md:absolute right-5 top-5 flex gap-2">
+      <nav className="md:absolute right-5 top-5 flex gap-2 mb-4 items-center justify-end">
         <Button variant={"outline"}>
           <PlusIcon className="mr-2" size={18} />
           New Chat
@@ -110,7 +110,12 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
                   case 'answerQuery':
                     return <Markdown key={toolCallId} content={toolInvocation.result} />;
                   case 'scheduleEvent':
-                    return (<> <p key={toolCallId}>Scheduled your event ✌️</p> <Events events={[toolInvocation.result]} /> </>);
+                    return (
+                    <>
+                      <p key={toolCallId}>Scheduled your event ✌️</p>
+                      {(toolInvocation.result).map((event: any) => (<EventItem event={event} />))}
+                    </>
+                  );
                 }
               }
 

@@ -23,8 +23,6 @@ export async function GET(request: NextRequest) {
 
   const calendar = google.calendar({ version: 'v3', auth: oauth });
   
-  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
-  
   const response = await calendar.events.list({
     calendarId: 'primary',
     timeMin: (minTime && minTime !== "undefined") ? new Date(minTime).toISOString() : new Date().toISOString(),

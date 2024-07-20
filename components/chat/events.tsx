@@ -10,7 +10,7 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
       <div className="mb-5">
         <p className="opacity-50">✦ Matty</p>
         {formattedEvents ? <p>Here are your upcoming events:</p> : <p>Seems like you got no upcoming events...</p>}
-        {formattedEvents && (<ul>{formattedEvents.map(event => <Event key={event.id} event={event} />)}</ul>) }
+        {formattedEvents && (<ul>{formattedEvents.map(event => <EventItem key={event.id} event={event} />)}</ul>) }
         <p className="mt-4">Anything you'd like to schedule for today?</p>
       </div>
       
@@ -26,7 +26,7 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
   }
 }
 
-export function Event(props: PropsWithChildren<{ event: any }>) {
+export function EventItem(props: PropsWithChildren<{ event: any }>) {
   return (
     <li key={props.event.id} className="my-2">
       <p><span className="text-sky-300">•</span> {props.event.summary}</p>

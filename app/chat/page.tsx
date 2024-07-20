@@ -11,6 +11,7 @@ import ProfileMenu from "@/components/chat/profileMenu"
 import { Button } from "@/components/ui/button"
 
 import { PlusIcon } from "lucide-react"
+import { getURL } from "@/lib/utils"
 
 
 export default async function Page()  {
@@ -27,12 +28,14 @@ export default async function Page()  {
   let events: calendar_v3.Schema$Event[] = []
 
   try {
-    const response = await fetch(`http://localhost:3000/api/calendar/getEvents?token=${PROVIDER_TOKEN}`);
+    const response = await fetch(`${getURL()}/api/calendar/getEvents?token=${PROVIDER_TOKEN}`);
     if (!response.ok) { throw new Error('Network response was not ok'); }
     events = await response.json();
   } catch (error) {
     console.error('Error fetching calendar events:', error);
   }
+
+  console.log(getURL())
 
 
   return (
