@@ -35,9 +35,6 @@ export default async function Page()  {
     console.error('Error fetching calendar events:', error);
   }
 
-  console.log(getURL())
-
-
   return (
     <main className="h-screen">
       <Chat providerToken={PROVIDER_TOKEN} user={user} credits={credits.data?.credits || 0}>

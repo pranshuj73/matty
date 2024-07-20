@@ -12,7 +12,6 @@ export default function Login() {
   const supabase = createClient();
 
   const signIn = async () => {
-    console.log(getURL());
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {

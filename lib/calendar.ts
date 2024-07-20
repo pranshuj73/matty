@@ -2,6 +2,7 @@ import { calendar_v3, google } from "googleapis";
 import Fuse from 'fuse.js';
 import { generateText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai"
+import { getURL } from "@/lib/utils"
 
 const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
