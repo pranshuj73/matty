@@ -112,14 +112,14 @@ export async function findEventByName(eventName: string, question: string | unde
   return "Could not find details about the event you asked for. Please try again.";
 }
 
-export async function scheduleEvent( token: string, summary: string, eventStartDateTime: string, eventEndDateTime: string, description?: string, location?: string, attendees?: string) {
+export async function scheduleEvent( token: string, summary: string, eventStartDateTime: string, eventEndDateTime: string, timezone: string, description?: string, location?: string, attendees?: string) {
   try {
     const response = await fetch('http://localhost:3000/api/calendar/scheduleEvent', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token, summary, eventStartDateTime, eventEndDateTime, description, location, attendees }),
+      body: JSON.stringify({ token, summary, eventStartDateTime, eventEndDateTime, timezone, description, location, attendees }),
     });
     if (!response.ok) { throw new Error('Network response was not ok'); }
 

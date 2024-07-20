@@ -4,21 +4,25 @@ import { calendar_v3 } from "@googleapis/calendar"
 import { PropsWithChildren } from "react"
 
 export default function Events({ events }: { events: calendar_v3.Schema$Event[] }) {
+  const formattedEvents = events && events.length !== 0 ? formatEvents(events.slice(0, 5)) : [];
   try {
     return (
-      <ul>
-        {(!events || events.length === 0) ? 
-          <p>Seems like you got no upcoming events...</p>
-          :
-          formatEvents(events).map((event: any) => 
-            <Event key={event.id} event={event} />
-        )
-      }
-      </ul>
+      <div className="mb-5">
+        <p className="opacity-50">✦ Matty</p>
+        {formattedEvents ? <p>Here are your upcoming events:</p> : <p>Seems like you got no upcoming events...</p>}
+        {formattedEvents && (<ul>{formattedEvents.map(event => <Event key={event.id} event={event} />)}</ul>) }
+        <p className="mt-4">Anything you'd like to schedule for today?</p>
+      </div>
+      
     )
   } catch (error) {
     console.error(error)
-    return <p>Error fetching events...</p>
+    return (
+      <div className="mb-5">
+        <p className="opacity-50">✦ Matty</p>
+        <p>Error fetching events...</p>
+      </div>
+    )
   }
 }
 

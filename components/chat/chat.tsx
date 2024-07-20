@@ -4,7 +4,7 @@ import { useChat } from 'ai/react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { calendar_v3 } from '@googleapis/calendar';
 import { Input } from '@/components/ui/input';
-import { SendHorizonalIcon } from 'lucide-react';
+import { PlusIcon, SendHorizonalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React, { PropsWithChildren, use, useEffect, useState } from 'react';
 import Markdown from '@/components/chat/markdown';
@@ -13,9 +13,10 @@ import Events from './events';
 import { fetchEvents, findEventByName, scheduleEvent } from '@/lib/calendar';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
+import ProfileMenu from './profileMenu';
 
 
-export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema$Event[], providerToken: string, user: User, credits: number }>) {
+export default function Chat(props: PropsWithChildren<{ providerToken: string, user: User, credits: number }>) {
   const supabase = createClient();
   const [credits, setCredits] = useState(props.credits);
 
@@ -56,7 +57,7 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
 
         case 'scheduleEvent': {
           const { summary, description, location, attendees, eventStartDateTime, eventEndDateTime } = toolCall.args as { summary: string, eventStartDateTime: string, eventEndDateTime: string, description?: string, location?: string, attendees?: string };
-          const response = await scheduleEvent(props.providerToken, summary, eventStartDateTime, eventEndDateTime, description, location, attendees);
+          const response = await scheduleEvent(props.providerToken, summary, eventStartDateTime, eventEndDateTime, Intl.DateTimeFormat().resolvedOptions().timeZone, description, location, attendees);
           return response;
         }
 
@@ -80,6 +81,14 @@ export default function Chat(props: PropsWithChildren<{ data: calendar_v3.Schema
 
   return (
     <section className={`p-8 max-w-screen-md mx-auto h-full flex flex-col`}>
+      <nav className="md:absolute right-5 top-5 flex gap-2">
+        <Button variant={"outline"}>
+          <PlusIcon className="mr-2" size={18} />
+          New Chat
+        </Button>
+
+        <ProfileMenu credits={credits} />
+      </nav>
       <ScrollArea className="self-stretch place-self-stretch flex-1 pr-4">
         {props.children}
         {messages.map(m => (

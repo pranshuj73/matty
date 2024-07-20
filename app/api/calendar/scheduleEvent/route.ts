@@ -4,24 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: any) {
   try {
-    const { token, summary, description, location, attendees, eventStartDateTime, eventEndDateTime } = await request.json();
-
-    console.log('Received event data:', {
-      summary,
-      description,
-      location,
-      attendees,
-      eventStartDateTime,
-      eventEndDateTime,
-    });
+    const { token, summary, eventStartDateTime, eventEndDateTime, timezone, description, location, attendees } = await request.json();
 
     if (!token || typeof token !== 'string') {
-      console.error('Invalid token');
       return NextResponse.json({ error: 'Invalid token' }, { status: 400 });
     }
 
     if (!eventStartDateTime || !eventEndDateTime) {
-      console.error('Invalid event start or end date-time');
       return NextResponse.json({ error: 'Invalid event start or end date-time' }, { status: 400 });
     }
 
@@ -37,7 +26,6 @@ export async function POST(request: any) {
     });
 
     const calendar = google.calendar({ version: 'v3', auth: oauth });
-    
 
     var event: calendar_v3.Schema$Event = {
       'summary': summary || "Untitled Event",
@@ -45,11 +33,11 @@ export async function POST(request: any) {
       'description': (description ? `${description} ` : " " )+ "✦ Created by Matty",
       'start': {
         'dateTime': eventStartDateTime,
-        'timeZone': 'Asia/Kolkata'
+        'timeZone': timezone
       },
       'end': {
         'dateTime': eventEndDateTime,
-        'timeZone': 'Asia/Kolkata'
+        'timeZone': timezone
       },
       'attendees': attendees ? attendees.split(',').map((email: string) => ({ email: email.trim() })) : undefined
     };
