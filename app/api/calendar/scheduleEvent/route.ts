@@ -31,7 +31,7 @@ export async function POST(request: any) {
     var event: calendar_v3.Schema$Event = {
       'summary': summary || "Untitled Event",
       'location': location,
-      'description': (description ? `${description} ` : " " )+ "✦ Created by Matty",
+      'description': (description ? `${description} ` : "" )+ "✦ Created by Matty",
       'start': {
         'dateTime': eventStartDateTime,
         'timeZone': (timezone.length !== 0) ? timezone : "UTC"
@@ -47,6 +47,14 @@ export async function POST(request: any) {
       calendarId: 'primary',
       requestBody: event,
     })
+
+    // update the event date-time to the user's timezone
+    if (response.data.start && response.data.start.dateTime) {
+      response.data.start.dateTime = new Date(response.data.start.dateTime).toLocaleString('en-US', { timeZone: timezone });
+    }
+    if (response.data.end && response.data.end.dateTime) {
+      response.data.end.dateTime = new Date(response.data.end.dateTime).toLocaleString('en-US', { timeZone: timezone });
+    }
 
     return NextResponse.json(formatEvents([response.data]));
   } catch (error) {
