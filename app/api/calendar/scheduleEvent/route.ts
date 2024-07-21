@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: any) {
   try {
-    const { token, summary, eventStartDateTime, eventEndDateTime, description, location, attendees } = await request.json();
+    const { token, summary, eventStartDateTime, eventEndDateTime, timezone, description, location, attendees } = await request.json();
 
     if (!token || typeof token !== 'string') {
       return NextResponse.json({ error: 'Invalid token' }, { status: 400 });
@@ -34,11 +34,11 @@ export async function POST(request: any) {
       'description': (description ? `${description} ` : " " )+ "✦ Created by Matty",
       'start': {
         'dateTime': eventStartDateTime,
-        'timeZone': "UTC"
+        'timeZone': (timezone.length !== 0) ? timezone : "UTC"
       },
       'end': {
         'dateTime': eventEndDateTime,
-        'timeZone': "UTC"
+        'timeZone': (timezone.length !== 0) ? timezone : "UTC"
       },
       'attendees': attendees ? attendees.split(',').map((email: string) => ({ email: email.trim() })) : undefined
     };
