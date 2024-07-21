@@ -114,7 +114,9 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
                     return (
                     <>
                       <p key={toolCallId}>Scheduled your event ✌️</p>
-                      {(toolInvocation.result).map((event: any) => (<EventItem event={event} />))}
+                      <ul>
+                        {(toolInvocation.result).map((event: any) => (<EventItem event={event} />))}
+                      </ul>
                     </>
                   );
                 }
