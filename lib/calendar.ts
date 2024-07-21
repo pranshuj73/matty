@@ -34,7 +34,7 @@ export function formatEvents(data: calendar_v3.Schema$Event[]) {
 
     return {
       "id": event.id,
-      "summary": event.summary,
+      "summary": event.summary ? event.summary : "Untitled Event",
       "description": event.description,
       "start": {
         "dateTime": event.start!.dateTime,
