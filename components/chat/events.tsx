@@ -9,8 +9,8 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
     return (
       <div className="mb-5">
         <p className="opacity-50">✦ Matty</p>
-        {formattedEvents ? <p>Here are your upcoming events:</p> : <p>Seems like you got no upcoming events...</p>}
-        {formattedEvents && (<ul>{formattedEvents.map(event => <EventItem key={event.id} event={event} />)}</ul>) }
+        {(formattedEvents.length !== 0) ? <p>Here are your upcoming events:</p> : <p>Seems like you got no upcoming events...</p>}
+        {(formattedEvents.length !== 0) && (<ul>{formattedEvents.map(event => <EventItem key={event.id} event={event} />)}</ul>) }
         <p className="mt-4">Anything you'd like to schedule for today?</p>
       </div>
       
