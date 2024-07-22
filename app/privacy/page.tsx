@@ -22,7 +22,7 @@ Matty's use and transfer to any other app of information received from Google AP
 We may collect information about you in a variety of ways. The information we may collect on the Site includes:
 
 1. **Personal Data**
-   - Personally identifiable information, such as your name, email address, session data and profile picture that you voluntarily give to us when you register on the Site or when you choose to participate in various activities related to the Site.
+   - Personally identifiable information, such as your name, email address, session data and profile picture that you voluntarily give to us when you register on the Site with Google.
 
 2. **Usage Data** 
    - The Site stores data related to your usage of the web app, including but not limited to the pages you visit, the features you use, and the time spent on the app. This data is used to improve the functionality of the app and to provide you with a better user experience.
@@ -47,12 +47,15 @@ Having accurate information about you permits us to provide you with a smooth, e
 - Respond to product and customer service requests.
 - Manage our everyday business needs such as website administration, analytics, fraud prevention, and enforcement of our corporate reporting obligations and Terms of Service or to comply with the law.
 
+Matty also uses Google APIs in order to access data from your calendar. This data may be sent to OpenAI GPT-4 API to provide you with relevant information. These services may store your data for training purposes.
+
+Matty will not use your personal information for any other purpose without your consent.
 
 ### Security & Storage of Your Information
 
 We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other types of misuse.
 
-When you chat with the app, your queries may be sent to OpenAI GPT-4 API or other third-party services to provide you with relevant information. These services may store your queries and responses for training purposes.
+When you chat with the app, your queries may be sent to OpenAI GPT-4 API to provide you with relevant information. These services may store your queries and responses for training purposes.
 
 ### Your Consent
 
