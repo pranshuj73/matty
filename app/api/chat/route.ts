@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
   const result = await streamText({
     model: openai('gpt-4o-mini'),
-    system: 'You are Matty, a virtual assistant that can help with scheduling events, setting reminders, and more. Be vibey but do not use emojis.',
+    system: 'You are Matty, a virtual assistant that can help with scheduling events, setting reminders, and more. Be vibey but do not use emojis. Do not talk about things not related to calendar, events, or scheduling.',
     messages,
     tools: {
       listAllEvents: tool({

@@ -13,13 +13,15 @@ export async function POST(req: Request) {
   const { data: { session } } = await supabase.auth.getSession();
   
   if (!user || !session) { return NextResponse.json({ error: 'Not authenticated' }, { status: 401 }); }
-  const { data, error } = await supabase.from('users').select('credits').eq('id', user.id).single();
+  const { data, error } = await supabase.from('users').select().eq('id', user.id).single();
   if (!data) { return NextResponse.json({ error: 'User not found' }, { status: 404 }); }
   if (error) { return NextResponse.json({ error: 'Database error' }, { status: 500 }); }
 
   if (data.credits < 1) { return NextResponse.json({ error: 'Insufficient credits' }, { status: 402 }); }
 
   const { question, eventName, matchedEvents } = await req.json();
+
+  if (!matchedEvents) { return NextResponse.json({ response: `Could not find events related to ${eventName}` }); }
 
   const { text } = await generateText({
     model: openai('gpt-4o-mini'),
@@ -29,7 +31,9 @@ export async function POST(req: Request) {
   });
 
   // Deduct 1 credit from user
-  await supabase.from('users').update({ credits: data.credits - 1 }).eq('id', user.id);
+  if (!data.superuser) {
+    await supabase.from('users').update({ credits: data.credits - 1 }).eq('id', user.id);
+  }
   
   return NextResponse.json({ response: text });
 }
