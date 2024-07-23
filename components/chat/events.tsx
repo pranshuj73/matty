@@ -8,7 +8,6 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
   try {
     return (
       <div className="mb-5">
-        <p className="opacity-50">✦ Matty</p>
         {(formattedEvents.length !== 0) ? <p>Here are your upcoming events:</p> : <p>Seems like you got no upcoming events...</p>}
         {(formattedEvents.length !== 0) && (<ul>{formattedEvents.map(event => <EventItem key={event.id} event={event} />)}</ul>) }
         <p className="mt-4">Anything you'd like to schedule for today?</p>
@@ -19,7 +18,6 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
     console.error(error)
     return (
       <div className="mb-5">
-        <p className="opacity-50">✦ Matty</p>
         <p>Error fetching events...</p>
       </div>
     )

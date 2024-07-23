@@ -107,7 +107,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
                 switch (toolName) {
                   case 'listAllEvents':
                   case 'listEventsWithinRange':
-                    return ( <> <p>Here are your events:</p> <Events key={toolCallId} events={toolInvocation.result} /> </> );
+                    return <Events key={toolCallId} events={toolInvocation.result} />;
                   case 'answerQuery':
                     return <Markdown key={toolCallId} content={toolInvocation.result} />;
                   case 'scheduleEvent':

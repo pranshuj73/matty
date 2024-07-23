@@ -38,6 +38,7 @@ export default async function Page()  {
   return (
     <main className="h-screen">
       <Chat providerToken={PROVIDER_TOKEN} user={user} credits={credits.data?.credits || 0}>
+        <p className="opacity-50">✦ Matty</p>
         <Events events={events} />
       </Chat>
     </main>
