@@ -6,7 +6,7 @@ import { calendar_v3 } from '@googleapis/calendar';
 import { Input } from '@/components/ui/input';
 import { PlusIcon, SendHorizonalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import React, { PropsWithChildren, use, useEffect, useState } from 'react';
+import React, { PropsWithChildren, use, useEffect, useRef, useState } from 'react';
 import Markdown from '@/components/chat/markdown';
 import { ToolInvocation, tool } from 'ai';
 import Events, { EventItem } from './events';
@@ -16,11 +16,13 @@ import { User } from '@supabase/supabase-js';
 import ProfileMenu from './chat-nav';
 import ChatNav from './chat-nav';
 import Link from 'next/link';
+import TypingLoader from './typing-loader';
 
 
 export default function Chat(props: PropsWithChildren<{ providerToken: string, user: User, credits: number }>) {
   const supabase = createClient();
   const [credits, setCredits] = useState(props.credits);
+  const chatRef = useRef<HTMLDivElement>(null);
 
   async function fetchCredits() {
     const { data: userData, error } = await supabase.from('users').select('credits').eq('id', props.user.id).single();
@@ -72,6 +74,11 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
     }
   });
 
+  useEffect(() => {
+    // Scroll to bottom on new message
+    chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' });
+  }, [messages]);
+
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,7 +94,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
       <ChatNav credits={credits} />
 
 
-      <ScrollArea className="self-stretch place-self-stretch flex-1 pr-4">
+      <ScrollArea viewportRef={chatRef} className="h-full flex-1 pr-4">
         {props.children}
         {messages.map(m => (
           <div key={m.id} className="mb-5">
@@ -125,6 +132,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
           </div>
         ))}
       </ScrollArea>
+      { isLoading && <TypingLoader /> }
       { (credits < 1) && (<span className='pt-4 text-xs opacity-60 text-red-400'>Insufficient credits. Please contact <Link className="border-b border-dashed border-red-400" href={"mailto:hello@pranshujha.com"}>hello@pranshujha.com</Link> with your email for more credits.</span>) }
       <form className="flex gap-2 pt-4" onSubmit={handleFormSubmit}>
         <Input

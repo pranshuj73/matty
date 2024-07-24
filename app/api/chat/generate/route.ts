@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
   const { text } = await generateText({
     model: openai('gpt-4o-mini'),
-    system: 'You are Matty, a virtual assistant that can help with scheduling events, setting reminders, and more. Be vibey but do not use emojis.',
+    system: 'You are Matty, a virtual assistant that can help with scheduling events, setting reminders, and more. Be vibey but do not use emojis. Assume all questions asked by user are only about their calendar & scheduled events.',
     prompt: `Events: "${matchedEvents}` + (question ? `User: "${question}"` : `Give a short description about "${eventName}"`),
     toolChoice: 'none',
   });
