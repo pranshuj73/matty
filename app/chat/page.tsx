@@ -4,13 +4,8 @@ import { createClient } from "@/lib/supabase/server"
 import { calendar_v3 } from "@googleapis/calendar"
 
 import Chat from "@/components/chat/chat"
-import DemoChat from "@/components/chat/demo-chat"
 import Events from "@/components/chat/events"
-import ProfileMenu from "@/components/chat/profileMenu"
 
-import { Button } from "@/components/ui/button"
-
-import { PlusIcon } from "lucide-react"
 import { getURL } from "@/lib/utils"
 
 
