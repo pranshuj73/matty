@@ -13,7 +13,9 @@ import Events, { EventItem } from './events';
 import { fetchEvents, findEventByName, scheduleEvent } from '@/lib/calendar';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
-import ProfileMenu from './profileMenu';
+import ProfileMenu from './chat-nav';
+import ChatNav from './chat-nav';
+import Link from 'next/link';
 
 
 export default function Chat(props: PropsWithChildren<{ providerToken: string, user: User, credits: number }>) {
@@ -82,14 +84,9 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
 
   return (
     <section className={`p-8 max-w-screen-md mx-auto h-full flex flex-col`}>
-      <nav className="md:absolute right-5 top-5 flex gap-2 mb-4 items-center justify-end">
-        <Button variant={"outline"}>
-          <PlusIcon className="mr-2" size={18} />
-          New Chat
-        </Button>
+      <ChatNav credits={credits} />
 
-        <ProfileMenu credits={credits} />
-      </nav>
+
       <ScrollArea className="self-stretch place-self-stretch flex-1 pr-4">
         {props.children}
         {messages.map(m => (
@@ -128,7 +125,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
           </div>
         ))}
       </ScrollArea>
-      { (credits < 1) && (<span className='pt-4 text-xs opacity-60 text-red-400'>Insufficient credits. Please add more to continue using Matty!</span>) }
+      { (credits < 1) && (<span className='pt-4 text-xs opacity-60 text-red-400'>Insufficient credits. Please contact <Link className="border-b border-dashed border-red-400" href={"mailto:hello@pranshujha.com"}>hello@pranshujha.com</Link> with your email for more credits.</span>) }
       <form className="flex gap-2 pt-4" onSubmit={handleFormSubmit}>
         <Input
           value={input}
