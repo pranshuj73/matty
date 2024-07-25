@@ -75,6 +75,13 @@
   }
 }
 
+@layer utilities {
+  .min-h-dynamic {
+    min-height: 100vh; /* fallback for Opera, IE and etc. */
+    min-height: 100dvh;
+  }
+}
+
 .markdown > ul li p, ol li p {
   display: inline;
 }

@@ -24,9 +24,10 @@ const placeholders = [
   "Do I have any meetings tomorrow?",
   "Set up a team lunch for Friday at 1 PM.",
   "What's the next event on my calendar?",
-  "Do I have any overlapping events today?",
+  "Do I have any birthdays coming up this week?",
   "What's on my calendar for the next three days?",
   "Schedule a meeting with halpert@dundermifflin.com next Monday at 2PM.",
+  "Do I have any overlapping events today?",
   "Who are invited to my Donut Appreciation Hour next Friday?",
   "Set up a 'Taco Tuesday Team Huddle' at 1 PM next Tuesday.",
   "Schedule a 'Netflix and Chill' night at 8 PM this Saturday.",
@@ -105,7 +106,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
   
 
   return (
-    <section className={`p-8 max-w-screen-md mx-auto h-full flex flex-col`}>
+    <section className={`p-8 max-w-screen-md mx-auto h-full min-h-dynamic flex flex-col`}>
       <ChatNav credits={credits} />
 
       <ScrollArea viewportRef={chatRef} className="h-full flex-1 pr-4">

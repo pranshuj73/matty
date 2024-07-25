@@ -240,7 +240,7 @@ export function PlaceholdersAndVanishInput({
                 duration: 0.3,
                 ease: "linear",
               }}
-              className="text-foreground/60 pl-2 sm:pl-5 text-left w-[calc(100%-2rem)] truncate"
+              className="text-foreground/60 pl-4 sm:pl-5 pr-2 text-left w-[calc(100%-2rem)] truncate"
             >
               {placeholders[currentPlaceholder]}
             </motion.p>
