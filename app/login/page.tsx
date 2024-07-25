@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import AnimatedShinyText from "@/components/magicui/animated-shiny-text";
+import AnimatedShinyText from "@/components/magicternity/animated-shiny-text";
 import { ChevronLeftIcon } from "lucide-react";
 import { getURL } from "@/lib/utils";
 

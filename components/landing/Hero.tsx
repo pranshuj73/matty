@@ -1,12 +1,12 @@
 "use client";
 import { ArrowRightIcon } from "lucide-react";
-import AnimatedShinyText from "@/components/magicui/animated-shiny-text";
-import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
-import Particles from "@/components/magicui/particles";
+import AnimatedShinyText from "@/components/magicternity/animated-shiny-text";
+import { TextGenerateEffect } from "@/components/magicternity/text-generate-effect";
+import Particles from "@/components/magicternity/particles";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { BorderBeam } from "@/components/magicui/border-beam";
+import { BorderBeam } from "@/components/magicternity/border-beam";
 import Image from "next/image";
 import { DISCORD_URL, WAITLIST_URL } from "@/lib/values";
 

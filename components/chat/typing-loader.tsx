@@ -10,6 +10,6 @@ export default function TypingLoader() {
     return () => clearInterval(interval);
   }, [dot]);
   return (
-    <p className="text-sm opacity-60">Matty is thinking{dots[dot]}</p>
+    <p className="text-sm opacity-60">✦ Matty is thinking{dots[dot]}</p>
   );
 }

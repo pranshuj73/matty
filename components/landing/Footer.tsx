@@ -1,5 +1,5 @@
 import Link from "next/link";
-import AnimatedShinyText from "../magicui/animated-shiny-text";
+import AnimatedShinyText from "../magicternity/animated-shiny-text";
 
 export default function Footer() {
   return (

@@ -6,8 +6,8 @@ import {
   RefreshCwIcon,
 } from "lucide-react";
  
-import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
-import Notifications from "@/components/magicui/notifications";
+import { BentoCard, BentoGrid } from "@/components/magicternity/bento-grid";
+import Notifications from "@/components/magicternity/notifications";
 
 const features = [
   {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowRightIcon } from "lucide-react";
-import Ripple from "@/components/magicui/ripple";
+import Ripple from "@/components/magicternity/ripple";
 import { WAITLIST_URL } from "@/lib/values";
 
 export default function CallToAction() {
