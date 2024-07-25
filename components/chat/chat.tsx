@@ -17,7 +17,22 @@ import ProfileMenu from './chat-nav';
 import ChatNav from './chat-nav';
 import Link from 'next/link';
 import TypingLoader from './typing-loader';
+import { PlaceholdersAndVanishInput } from '../magicternity/placeholders-and-vanish-input';
 
+const placeholders = [
+  "What's my schedule for today?",
+  "Do I have any meetings tomorrow?",
+  "Set up a team lunch for Friday at 1 PM.",
+  "What's the next event on my calendar?",
+  "Do I have any overlapping events today?",
+  "What's on my calendar for the next three days?",
+  "Schedule a meeting with halpert@dundermifflin.com next Monday at 2PM.",
+  "Who are invited to my Donut Appreciation Hour next Friday?",
+  "Set up a 'Taco Tuesday Team Huddle' at 1 PM next Tuesday.",
+  "Schedule a 'Netflix and Chill' night at 8 PM this Saturday.",
+  "Add a 'Beach Day with the Squad' at 11 AM next Sunday.",
+  "Set up a 'Binge-Watch Session of FRIENDS' from 7 - 10 PM tonight."
+];
 
 export default function Chat(props: PropsWithChildren<{ providerToken: string, user: User, credits: number }>) {
   const supabase = createClient();
@@ -93,7 +108,6 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
     <section className={`p-8 max-w-screen-md mx-auto h-full flex flex-col`}>
       <ChatNav credits={credits} />
 
-
       <ScrollArea viewportRef={chatRef} className="h-full flex-1 pr-4">
         {props.children}
         {messages.map(m => (
@@ -133,19 +147,13 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
         ))}
       </ScrollArea>
       { isLoading && <TypingLoader /> }
-      { (credits < 1) && (<span className='pt-4 text-xs opacity-60 text-red-400'>Insufficient credits. Please contact <Link className="border-b border-dashed border-red-400" href={"mailto:hello@pranshujha.com"}>hello@pranshujha.com</Link> with your email for more credits.</span>) }
-      <form className="flex gap-2 pt-4" onSubmit={handleFormSubmit}>
-        <Input
-          value={input}
-          placeholder="Say Something..."
-          onChange={handleInputChange}
-          className=" focus-visible:bg-accent transition-colors duration-150 ease-in-out"
-          disabled={credits < 1 || isLoading}
-        />
-        <Button variant={"outline"} size={"icon"} type='submit' disabled={credits < 1 || isLoading}>
-          <SendHorizonalIcon size={18} />
-        </Button>
-      </form>
+      { (credits < 1) && (<span className='pt-4 ml-5 text-xs opacity-60 text-red-400'>Insufficient credits. Please contact <Link className="border-b border-dashed border-red-400" href={"mailto:hello@pranshujha.com"}>hello@pranshujha.com</Link> with your email for more credits.</span>) }
+      <PlaceholdersAndVanishInput
+        placeholders={placeholders}
+        onChange={handleInputChange}
+        onSubmit={handleFormSubmit}
+        disabled={isLoading || credits < 1}
+      />
     </section>
   );
 }
