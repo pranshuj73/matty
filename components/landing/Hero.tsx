@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BorderBeam } from "@/components/magicternity/border-beam";
 import Image from "next/image";
-import { DISCORD_URL, WAITLIST_URL } from "@/lib/values";
+import { DISCORD_URL, PRIMARY_BTN_URL } from "@/lib/values";
 
 
 export default function Hero() {
@@ -25,11 +25,11 @@ export default function Hero() {
         </Link>
         <TextGenerateEffect className="text-4xl md:text-5xl lg:text-7xl font-semibold z-50" words={words} />
         <p className="mt-6 text-sm sm:text-md md:text-lg lg:text-xl opacity-60 max-w-screen-md">
-          Matty is your assistant for all things related to your calendar. It can help you manage your schedule, set reminders, and even help you conquer your goals.
+          Matty is your assistant for all things related to your calendar. It can help you manage your schedule, set reminders, and even conquer your goals.
         </p>
 
         <Button className="px-8 mt-10" asChild>
-          <Link className="group" href={WAITLIST_URL} target="_blank" rel="noreferrer noopener">Get Early Access <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" /></Link>
+          <Link className="group" href={PRIMARY_BTN_URL} rel="noreferrer noopener">Try Matty Now <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" /></Link>
         </Button>
 
         <div className="shadow-[0px_0px_300px_0px_#63b3edaa] top-full left-0 bg-black absolute mt-24 -z-10 flex max-w-screen-lg w-full h-auto aspect-video flex-col items-center justify-center overflow-hidden rounded-lg border bg-background">

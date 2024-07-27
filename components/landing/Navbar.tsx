@@ -2,7 +2,7 @@ import { ArrowRightIcon, CircleDashedIcon } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DISCORD_URL, WAITLIST_URL } from "@/lib/values";
+import { DISCORD_URL, PRIMARY_BTN_URL } from "@/lib/values";
 
 export default function Navbar() {
   return (
@@ -23,8 +23,8 @@ export default function Navbar() {
           </Button>
           
           <Button className="group scale-90" variant={"default"} size={"sm"} asChild>
-            <Link href={WAITLIST_URL} target="_blank" rel="noreferrer noopener">
-              Early Access <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+            <Link href={PRIMARY_BTN_URL} rel="noreferrer noopener">
+              Try Now <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
             </Link>
           </Button>
         </div>
