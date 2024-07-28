@@ -76,9 +76,13 @@
 }
 
 @layer utilities {
-  .min-h-dynamic {
+  .h-dynamic {
     min-height: 100vh; /* fallback for Opera, IE and etc. */
     min-height: 100dvh;
+    height: 100vh; /* fallback for Opera, IE and etc. */
+    height: 100dvh;
+    max-height: 100vh; /* fallback for Opera, IE and etc. */
+    max-height: 100dvh;
   }
 }
 

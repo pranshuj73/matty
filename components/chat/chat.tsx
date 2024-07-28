@@ -1,23 +1,24 @@
 'use client';
 
+import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+
 import { useChat } from 'ai/react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { calendar_v3 } from '@googleapis/calendar';
-import { Input } from '@/components/ui/input';
-import { PlusIcon, SendHorizonalIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import React, { PropsWithChildren, use, useEffect, useRef, useState } from 'react';
-import Markdown from '@/components/chat/markdown';
-import { ToolInvocation, tool } from 'ai';
-import Events, { EventItem } from './events';
-import { fetchEvents, findEventByName, scheduleEvent } from '@/lib/calendar';
+import { ToolInvocation } from 'ai';
+
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
-import ProfileMenu from './chat-nav';
-import ChatNav from './chat-nav';
-import Link from 'next/link';
-import TypingLoader from './typing-loader';
-import { PlaceholdersAndVanishInput } from '../magicternity/placeholders-and-vanish-input';
+
+import { fetchEvents, findEventByName, scheduleEvent } from '@/lib/calendar';
+
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { PlaceholdersInput } from '@/components/magicternity/placeholders-input';
+
+import Markdown from '@/components/chat/markdown';
+import Events, { EventItem } from '@/components/chat/events';
+import ChatNav from '@/components/chat/chat-nav';
+import TypingLoader from '@/components/chat/typing-loader';
+
 
 const placeholders = [
   "What's my schedule for today?",
@@ -91,7 +92,6 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
   });
 
   useEffect(() => {
-    // Scroll to bottom on new message
     chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
@@ -106,10 +106,10 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
   
 
   return (
-    <section className={`p-8 max-w-screen-md mx-auto h-full min-h-dynamic flex flex-col`}>
+    <section className={`p-8 max-w-screen-md mx-auto h-dynamic flex flex-col`}>
       <ChatNav credits={credits} />
 
-      <ScrollArea viewportRef={chatRef} className="h-full flex-1 pr-4">
+      <ScrollArea viewportRef={chatRef} className="h-full flex-1 pr-4 pb-2">
         {props.children}
         {messages.map(m => (
           <div key={m.id} className="mb-5">
@@ -149,10 +149,11 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
       </ScrollArea>
       { isLoading && <TypingLoader /> }
       { (credits < 1) && (<span className='pt-4 ml-5 text-xs opacity-60 text-red-400'>Insufficient credits. Please contact <Link className="border-b border-dashed border-red-400" href={"mailto:hello@pranshujha.com"}>hello@pranshujha.com</Link> with your email for more credits.</span>) }
-      <PlaceholdersAndVanishInput
+      <PlaceholdersInput
         placeholders={placeholders}
-        onChange={handleInputChange}
-        onSubmit={handleFormSubmit}
+        value={input}
+        handleInputChange={handleInputChange}
+        handleSubmit={handleFormSubmit}
         disabled={isLoading || credits < 1}
       />
     </section>
