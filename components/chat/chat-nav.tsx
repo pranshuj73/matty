@@ -22,6 +22,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { useMediaQuery } from "@/lib/hooks/use-media-query";
+import { ROADMAP_URL } from "@/lib/values";
 
 
 export default function ChatNav({credits} : {credits: number}) {
@@ -74,8 +75,15 @@ export default function ChatNav({credits} : {credits: number}) {
             <DropdownMenuLabel>Credits: {credits}</DropdownMenuLabel>
             <DropdownMenuItem disabled>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push("/privacy")}>Privacy Policy</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => router.push("/terms")}>Terms & Conditions</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={ROADMAP_URL} target="_blank" rel="noreferrer noopener">Features Roadmap</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={"/privacy"} target="_blank" rel="noreferrer noopener">Privacy Policy</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={"/terms"} target="_blank" rel="noreferrer noopener">Terms & Conditions</Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
           </DropdownMenuContent>
@@ -101,7 +109,8 @@ export default function ChatNav({credits} : {credits: number}) {
             </DrawerDescription>
             
           </DrawerHeader>
-          <DrawerFooter className="pt-2 sm:flex-row">
+
+          <div className="flex flex-col gap-2 p-4 sm:flex-row">
             <Button className="w-full sm:w-1/2" variant={"outline"}>
               <PlusIcon className="mr-2" size={18} />
               New Chat
@@ -110,11 +119,16 @@ export default function ChatNav({credits} : {credits: number}) {
               <LogOutIcon className="mr-2" size={18} />
               Log Out
             </Button>
+          </div>
 
-            <p className="text-xs mt-2 opacity-50 text-center">
-              <Link href={"/privacy"}>Privacy Policy</Link>
+          <DrawerFooter className="sm:flex-row">
+            <p className="text-xs opacity-50 text-center">
+              <Link href={ROADMAP_URL} target="_blank" rel="noreferrer noopener">Track Upcoming Features</Link>
+            </p>
+            <p className="text-xs opacity-50 text-center">
+              <Link href={"/privacy"} target="_blank" rel="noreferrer noopener">Privacy Policy</Link>
               {" "} & {" "}
-              <Link href={"/terms"}>Terms & Conditions</Link>
+              <Link href={"/terms"} target="_blank" rel="noreferrer noopener">Terms & Conditions</Link>
             </p>
           </DrawerFooter>
         </DrawerContent>
