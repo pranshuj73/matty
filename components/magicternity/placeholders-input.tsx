@@ -6,14 +6,28 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { SendHorizonalIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const placeholders = [
+  "What's my schedule for today?",
+  "Do I have any meetings tomorrow?",
+  "Set up a team lunch for Friday at 1 PM.",
+  "What's the next event on my calendar?",
+  "Do I have any birthdays coming up this week?",
+  "What's on my calendar for the next three days?",
+  "Schedule a meeting with halpert@dundermifflin.com next Monday at 2PM.",
+  "Do I have any overlapping events today?",
+  "Who are invited to my Donut Appreciation Hour next Friday?",
+  "Set up a 'Taco Tuesday Team Huddle' at 1 PM next Tuesday.",
+  "Schedule a 'Netflix and Chill' night at 8 PM this Saturday.",
+  "Add a 'Beach Day with the Squad' at 11 AM next Sunday.",
+  "Set up a 'Binge-Watch Session of FRIENDS' from 7 - 10 PM tonight."
+];
+
 export function PlaceholdersInput({
-  placeholders,
   value,
   handleInputChange,
   handleSubmit,
   disabled,
 }: {
-  placeholders: string[];
   value: string;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -35,6 +49,24 @@ export function PlaceholdersInput({
       startAnimation(); // Restart the interval when the tab becomes visible
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !disabled) {
+        inputRef.current?.focus();
+        if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+
+      }
+      if (e.key === "Escape" && !disabled) {
+        inputRef.current?.blur();
+        startAnimation();
+      }
+    });
+
+    return () => {
+      document.removeEventListener("keydown", () => {});
+    };
+  }, []);
 
   useEffect(() => {
     startAnimation();
@@ -65,7 +97,7 @@ export function PlaceholdersInput({
         value={value}
         disabled={disabled}
         type="text"
-        className="w-full relative z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-5 pr-10"
+        className="w-full relative z-50 border-none dark:text-white bg-transparent text-black h-full rounded-md outline-none focus:outline-none ring-0 focus:ring-0 focus:bg-accent focus:border-white/20 transition-all duration-300 ease-in-out pl-4 sm:pl-5 pr-10"
       />
 
       <button

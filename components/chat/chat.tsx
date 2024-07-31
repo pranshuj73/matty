@@ -19,23 +19,6 @@ import Events, { EventItem } from '@/components/chat/events';
 import ChatNav from '@/components/chat/chat-nav';
 import TypingLoader from '@/components/chat/typing-loader';
 
-
-const placeholders = [
-  "What's my schedule for today?",
-  "Do I have any meetings tomorrow?",
-  "Set up a team lunch for Friday at 1 PM.",
-  "What's the next event on my calendar?",
-  "Do I have any birthdays coming up this week?",
-  "What's on my calendar for the next three days?",
-  "Schedule a meeting with halpert@dundermifflin.com next Monday at 2PM.",
-  "Do I have any overlapping events today?",
-  "Who are invited to my Donut Appreciation Hour next Friday?",
-  "Set up a 'Taco Tuesday Team Huddle' at 1 PM next Tuesday.",
-  "Schedule a 'Netflix and Chill' night at 8 PM this Saturday.",
-  "Add a 'Beach Day with the Squad' at 11 AM next Sunday.",
-  "Set up a 'Binge-Watch Session of FRIENDS' from 7 - 10 PM tonight."
-];
-
 export default function Chat(props: PropsWithChildren<{ providerToken: string, user: User, credits: number }>) {
   const supabase = createClient();
   const [credits, setCredits] = useState(props.credits);
@@ -169,7 +152,6 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
       { isLoading && <TypingLoader /> }
       { (credits < 1) && (<span className='pt-4 ml-5 text-xs opacity-60 text-red-400'>Insufficient credits. Please contact <Link className="border-b border-dashed border-red-400" href={"mailto:hello@pranshujha.com"}>hello@pranshujha.com</Link> with your email for more credits.</span>) }
       <PlaceholdersInput
-        placeholders={placeholders}
         value={input}
         handleInputChange={handleInputChange}
         handleSubmit={handleFormSubmit}
