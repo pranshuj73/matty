@@ -4,7 +4,7 @@ import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 import { useChat } from 'ai/react';
-import { ToolInvocation } from 'ai';
+import { Message, ToolInvocation } from 'ai';
 
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
@@ -93,6 +93,30 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
 
   useEffect(() => {
     chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' });
+
+    // check if last message was a tool call by assistant, if so check if it was a schedule event tool call and then insert a message to inform user of the event being scheduled
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.role === 'assistant' && lastMessage.toolInvocations) {
+      const lastToolInvocation = lastMessage.toolInvocations[lastMessage.toolInvocations.length - 1];
+      
+      switch (lastToolInvocation.toolName) {
+        case 'listAllEvents':
+        case 'listEventsWithinRange': {
+          const newMessage: Message = { ...lastMessage, content: "Here are your upcoming events:", };
+          messages.pop();
+          messages.push(newMessage);
+        }
+        
+        case 'scheduleEvent': {
+          const newMessage: Message = {
+            ...lastMessage,
+            content: `Your event${lastMessage.toolInvocations.length > 1 ? "s have" : " has"}  been scheduled!`,
+          };
+          messages.pop();
+          messages.push(newMessage);
+        }
+      }
+    }
   }, [messages]);
 
 
@@ -119,7 +143,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
             {m.toolInvocations?.map((toolInvocation: ToolInvocation) => {
               const toolCallId = toolInvocation.toolCallId;
               const toolName = toolInvocation.toolName;
-              
+
               if ('result' in toolInvocation) {
                 if (toolInvocation.result.error) { return <p key={toolCallId}>Error fetching details...</p>; }
 
@@ -127,17 +151,12 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
                   case 'listAllEvents':
                   case 'listEventsWithinRange':
                     return <Events key={toolCallId} events={toolInvocation.result} />;
+
                   case 'answerQuery':
                     return <Markdown key={toolCallId} content={toolInvocation.result} />;
+
                   case 'scheduleEvent':
-                    return (
-                    <>
-                      <p key={toolCallId}>Scheduled your event ✌️</p>
-                      <ul>
-                        {(toolInvocation.result).map((event: any) => (<EventItem event={event} />))}
-                      </ul>
-                    </>
-                  );
+                    return (toolInvocation.result).map((event: any) => (<EventItem event={event} />));
                 }
               }
 

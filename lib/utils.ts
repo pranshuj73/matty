@@ -5,21 +5,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function timeUntilEvent(event: string) {
-  const diff = new Date(event).getTime() - new Date().getTime();
-  if (diff < 0) {
+export function timeUntilEvent(eventStart: string, eventEnd: string) {
+  const startDiff = new Date(eventStart).getTime() - new Date().getTime();
+  const endDiff = new Date(eventEnd).getTime() - new Date().getTime();
+  if (startDiff < 0 && endDiff > 0) {
       return "Ongoing Right Now";
   }
-  const differenceInMs = Math.abs(diff);
+  const eventEnded = endDiff < 0;
+  const differenceInMs = Math.abs(startDiff);
   const differenceInMinutes = Math.floor(differenceInMs / (1000 * 60));
   const differenceInHours = Math.floor(differenceInMs / (1000 * 60 * 60));
   const differenceInDays = Math.floor(differenceInHours / 24);
   if (differenceInDays >= 1) {
-      return "In " + differenceInDays + ' Days';
+      return !eventEnded ? `In ${differenceInDays} Days` : `Ended ${differenceInDays} Days Ago`;
   } else if (differenceInHours >= 1) {
-      return "In " + differenceInHours + ' Hours';
+      return !eventEnded ? `In ${differenceInHours} Hours` : `Ended ${differenceInHours} Hours Ago`;
   } else {
-      return "In " + differenceInMinutes + ' Minutes';
+      return !eventEnded ? `In ${differenceInMinutes} Minutes` : `Ended ${differenceInMinutes} Minutes Ago`;
   }
 }
 

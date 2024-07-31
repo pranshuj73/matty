@@ -53,6 +53,8 @@ export default function ChatNav({credits} : {credits: number}) {
       </nav>
     )
   };
+
+  const AvatarFallbackText = user.user_metadata.name.split(" ").map((name: string) => name[0]).join("");
   
   if (isDesktop) {
     return (
@@ -66,7 +68,7 @@ export default function ChatNav({credits} : {credits: number}) {
           <DropdownMenuTrigger className="rounded-sm">
             <Avatar className="rounded-sm">
               <AvatarImage src={user.user_metadata.picture} />
-              <AvatarFallback>{user.user_metadata.name}</AvatarFallback>
+              <AvatarFallback className="font-bold rounded-sm">{AvatarFallbackText}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -98,7 +100,7 @@ export default function ChatNav({credits} : {credits: number}) {
         <DrawerTrigger>
           <Avatar className="rounded-sm">
             <AvatarImage src={user.user_metadata.picture} />
-            <AvatarFallback>{user.user_metadata.name}</AvatarFallback>
+            <AvatarFallback className="font-bold rounded-sm">{AvatarFallbackText}</AvatarFallback>
           </Avatar>
         </DrawerTrigger>
         <DrawerContent>
