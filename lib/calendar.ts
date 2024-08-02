@@ -4,6 +4,21 @@ import { generateText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai"
 import { getURL } from "@/lib/utils"
 
+export type FormattedEvent = calendar_v3.Schema$Event & {
+  start: {
+    dateTime: string;
+    time: string;
+    date: string;
+    timezone: string | null | undefined;
+  };
+  end: {
+    dateTime: string;
+    time: string;
+    date: string;
+    timezone: string | null | undefined;
+  };
+};
+
 const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export function formatEvents(data: calendar_v3.Schema$Event[]) {
@@ -33,9 +48,8 @@ export function formatEvents(data: calendar_v3.Schema$Event[]) {
     const formattedEndDate = endDateObj.toDateString().slice(0, 10);
 
     return {
-      "id": event.id,
+      ...event,
       "summary": event.summary ? event.summary : "Untitled Event",
-      "description": event.description,
       "start": {
         "dateTime": event.start!.dateTime,
         "time": formattedStartTime,
@@ -48,8 +62,6 @@ export function formatEvents(data: calendar_v3.Schema$Event[]) {
         "date": formattedEndDate,
         "timezone": event.end!.timeZone
       },
-      "location": event.location,
-
     }
   })
 

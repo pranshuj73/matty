@@ -7,6 +7,7 @@ import Chat from "@/components/chat/chat"
 import Events from "@/components/chat/events"
 
 import { getURL } from "@/lib/utils"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 
 export default async function Page()  {
@@ -32,10 +33,12 @@ export default async function Page()  {
 
   return (
     <main className="h-dynamic">
-      <Chat providerToken={PROVIDER_TOKEN} user={user} credits={credits.data?.credits || 0}>
-        <p className="opacity-50">✦ Matty</p>
-        <Events events={events} />
-      </Chat>
+      <TooltipProvider>
+        <Chat providerToken={PROVIDER_TOKEN} user={user} credits={credits.data?.credits || 0}>
+          <p className="opacity-50">✦ Matty</p>
+          <Events events={events} />
+        </Chat>
+      </TooltipProvider>
     </main>
   )
 } 

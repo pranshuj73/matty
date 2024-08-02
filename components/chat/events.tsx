@@ -1,7 +1,18 @@
-import { timeUntilEvent } from "@/lib/utils"
-import { formatEvents } from "@/lib/calendar"
 import { calendar_v3 } from "@googleapis/calendar"
 import { PropsWithChildren } from "react"
+
+import { timeUntilEvent } from "@/lib/utils"
+import { formatEvents, FormattedEvent } from "@/lib/calendar"
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import Link from "next/link"
+import { CalendarClockIcon, ClockIcon, MapPinIcon, TextIcon, UsersIcon } from "lucide-react"
+
 
 const genEmptyCalMessage = () => {
   const noUpcomingEventsMessageList = [
@@ -50,13 +61,38 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
   }
 }
 
-export function EventItem(props: PropsWithChildren<{ event: any }>) {
+export function EventItem(props: PropsWithChildren<{ event: FormattedEvent }>) {
   return (
-    <li key={props.event.id} className="my-2 list-none">
-      <p><span className="text-sky-300">•</span> {props.event.summary}</p>
-      <p className="opacity-50 text-xs">
-        {props.event.start.date} {props.event.start.time} • {timeUntilEvent(props.event.start.dateTime, props.event.end.dateTime)}
-      </p>
-    </li>
+    <Tooltip key={props.event.id}>
+      <TooltipTrigger className="flex flex-col my-2">
+        <p><span className="text-sky-300">•</span> {props.event.summary}</p>
+        <p className="opacity-50 text-xs">
+          {props.event.start.date} {props.event.start.time} • {timeUntilEvent(props.event.start.dateTime, props.event.end.dateTime)}
+        </p>
+      </TooltipTrigger>
+      <TooltipContent className="flex flex-col min-w-72 max-w-md gap-1" align="start" side="bottom">
+        <p className="flex items-start"><span className="mr-1.5 size-3 min-w-3">✦</span>{props.event.summary}</p>
+        <p className="flex items-start"><ClockIcon className="size-3 min-w-3 mr-1.5 mt-1"/>{props.event.start.date} • {props.event.start.time} - {props.event.end.time}</p>
+        {
+          props.event.description?.slice(0, -18) &&
+          <p className="flex items-start"><TextIcon className="size-3 min-w-3 mr-1.5 mt-1"/>{props.event.description.slice(0, -19)}</p>
+        }
+        {
+          props.event.location &&
+          <p className="flex items-start"><MapPinIcon className="size-3 min-w-3 mr-1.5 mt-1" />{props.event.location}</p>
+        }
+        {
+          props.event.attendees &&
+          <p className="flex items-start">
+            <UsersIcon className="size-3 min-w-3 mr-1.5 mt-1" />
+            {props.event.attendees.map(attendee => attendee.email).join(", ")}
+          </p>
+        }
+        {
+          props.event.htmlLink &&
+          <Link className="pt-2" href={props.event.htmlLink} target="_blank" rel="noreferrer noopener">View Event →</Link>
+        }
+      </TooltipContent>
+    </Tooltip>
   )
 }
