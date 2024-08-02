@@ -39,7 +39,7 @@ export function PlaceholdersInput({
   const startAnimation = () => {
     intervalRef.current = setInterval(() => {
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
-    }, 7000);
+    }, 5000);
   };
   const handleVisibilityChange = () => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
@@ -109,7 +109,7 @@ export function PlaceholdersInput({
       </button>
 
       <div className={`absolute inset-0 flex items-center rounded-full pointer-events-none ${value ? "opacity-0" : "opacity-100"}`}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           {!value && !disabled && (
             <motion.p
               initial={{
