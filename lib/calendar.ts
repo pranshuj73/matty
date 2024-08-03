@@ -5,6 +5,21 @@ import { getURL } from "@/lib/utils"
 
 const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
+export type FormattedEvent = calendar_v3.Schema$Event & {
+  start: {
+    dateTime: string;
+    time: string;
+    date: string;
+    timezone: string | null | undefined;
+  };
+  end: {
+    dateTime: string;
+    time: string;
+    date: string;
+    timezone: string | null | undefined;
+  };
+};
+
 export function formatEvents(data: calendar_v3.Schema$Event[]) {
   // if (!data) { return [] };
   const formattedEvents = data.map(event => {
