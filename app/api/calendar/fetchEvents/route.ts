@@ -30,7 +30,7 @@ export async function POST(request: any) {
       singleEvents: true,
       maxResults: 100,
       orderBy: 'startTime',
-      timeZone: (timezone && timezone.length !== 0) ? timezone : "UTC",
+      timeZone: (timezone && timezone.length !== 0) ? timezone : undefined,
     });
 
     const events = response.data.items || [];
