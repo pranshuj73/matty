@@ -8,6 +8,7 @@ import Events from "@/components/chat/events"
 
 import { getURL } from "@/lib/utils"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { fetchEvents } from "@/lib/calendar"
 
 
 export default async function Page()  {
@@ -24,9 +25,17 @@ export default async function Page()  {
   let events: calendar_v3.Schema$Event[] = []
 
   try {
-    const response = await fetch(`${getURL()}/api/calendar/getEvents?token=${PROVIDER_TOKEN}`);
+    // const response = await fetchEvents(PROVIDER_TOKEN);
+    const response = await fetch(`${getURL()}/api/calendar/fetchEvents`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: PROVIDER_TOKEN }),
+    });
     if (!response.ok) { throw new Error('Network response was not ok'); }
     events = await response.json();
+    console.log(events);
   } catch (error) {
     console.error('Error fetching calendar events:', error);
   }

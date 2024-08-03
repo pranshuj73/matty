@@ -58,7 +58,7 @@ export async function POST(request: any) {
 
     return NextResponse.json(formatEvents([response.data]));
   } catch (error) {
-    console.error('Error in POST handler:', error);
+    console.error('Error in Event Scheduling POST handler:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

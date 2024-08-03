@@ -1,27 +1,12 @@
 import { calendar_v3, google } from "googleapis";
 import Fuse from 'fuse.js';
-import { generateText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai"
 import { getURL } from "@/lib/utils"
-
-export type FormattedEvent = calendar_v3.Schema$Event & {
-  start: {
-    dateTime: string;
-    time: string;
-    date: string;
-    timezone: string | null | undefined;
-  };
-  end: {
-    dateTime: string;
-    time: string;
-    date: string;
-    timezone: string | null | undefined;
-  };
-};
 
 const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export function formatEvents(data: calendar_v3.Schema$Event[]) {
+  // if (!data) { return [] };
   const formattedEvents = data.map(event => {
     if (!event.start?.dateTime) {
       // convert date to dateTime
@@ -68,13 +53,18 @@ export function formatEvents(data: calendar_v3.Schema$Event[]) {
   return formattedEvents;
 }
 
-export async function fetchEvents(token: string, maxTime?: string, minTime?: string) {
+export async function fetchEvents(token: string, maxTime?: string, minTime?: string, timezone?: string) {
   try {
-    const optionalParamsString = minTime ? `&minTime=${minTime}` : '' + maxTime ? `&maxTime=${maxTime}` : '';
-    const response = await fetch(`${getURL()}/api/calendar/getEvents?token=${token}` + optionalParamsString);
+    const response = await fetch(`${getURL()}/api/calendar/fetchEvents`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify({ token, minTime, maxTime, timezone }),
+    });
     if (!response.ok) { throw new Error('Network response was not ok'); }
-    const events = await response.json();
-    return events.slice(0, 20);
+
+    const data = await response.json();
+
+    return data.slice(0, 20);
   } catch (error) {
     console.error('Error fetching calendar events:', error);
     return 'Error fetching calendar events';
@@ -83,7 +73,7 @@ export async function fetchEvents(token: string, maxTime?: string, minTime?: str
 
 
 export async function findEventByName(eventName: string, question: string | undefined, token: string) {
-  const eventsObj = await await fetch(`${getURL()}/api/calendar/getEvents?token=${token}`);
+  const eventsObj = await fetchEvents(token);
   const events = await eventsObj.json();
 
   if (!events) { return 'Error fetching events'; }
@@ -129,9 +119,7 @@ export async function scheduleEvent( token: string, summary: string, eventStartD
   try {
     const response = await fetch(`${getURL()}/api/calendar/scheduleEvent`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json', },
       body: JSON.stringify({ token, summary, eventStartDateTime, eventEndDateTime, timezone, description, location, attendees }),
     });
     if (!response.ok) { throw new Error('Network response was not ok'); }

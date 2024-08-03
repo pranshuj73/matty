@@ -18,6 +18,7 @@ import Markdown from '@/components/chat/markdown';
 import Events, { EventItem } from '@/components/chat/events';
 import ChatNav from '@/components/chat/chat-nav';
 import TypingLoader from '@/components/chat/typing-loader';
+import { updateTimezone } from '@/lib/utils';
 
 export default function Chat(props: PropsWithChildren<{ providerToken: string, user: User, credits: number }>) {
   const supabase = createClient();
@@ -46,15 +47,20 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
           return fetchEvents(props.providerToken);
 
         case 'listEventsWithinRange': {
-          const { minTime, maxTime } = toolCall.args as ListEventsArgs;
-          if (minTime) { return fetchEvents(props.providerToken, maxTime, minTime); }
-          return fetchEvents(props.providerToken, maxTime);
+          let { minTime, maxTime } = toolCall.args as ListEventsArgs;
+          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+          const offset = new Date().getTimezoneOffset();
+          maxTime = maxTime ? updateTimezone(maxTime, offset) : undefined;
+          minTime = minTime ? updateTimezone(minTime, offset) : undefined;
+
+          return fetchEvents(props.providerToken, maxTime, minTime, timezone);
         }
 
         case 'answerQuery': {
-          const { eventName } = toolCall.args as {eventName: string};
-          if (eventName) {
-            const answer = await findEventByName(eventName, input, props.providerToken);
+          const { key } = toolCall.args as {key: string};
+          if (key) {
+            const answer = await findEventByName(key, input, props.providerToken);
             return answer;  
           }
         }
@@ -82,14 +88,7 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
     if (lastMessage && lastMessage.role === 'assistant' && lastMessage.toolInvocations) {
       const lastToolInvocation = lastMessage.toolInvocations[lastMessage.toolInvocations.length - 1];
       
-      switch (lastToolInvocation.toolName) {
-        case 'listAllEvents':
-        case 'listEventsWithinRange': {
-          const newMessage: Message = { ...lastMessage, content: "Here are your upcoming events:", };
-          messages.pop();
-          messages.push(newMessage);
-        }
-        
+      switch (lastToolInvocation.toolName) {     
         case 'scheduleEvent': {
           const newMessage: Message = {
             ...lastMessage,
@@ -97,10 +96,11 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
           };
           messages.pop();
           messages.push(newMessage);
+          break;
         }
       }
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {

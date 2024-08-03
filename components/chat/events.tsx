@@ -23,7 +23,7 @@ const genEmptyCalMessage = () => {
     "No events coming up. Perfect opportunity to plan something fun!",
     "No events to worry about. What's on your to-do list?",
     "You're all caught up! Time to do something you love.",
-    "No events ahead. How about a little adventure or some downtime?",
+    "No events ahead. How about a little adventure or maybe some downtime?",
     "Looks like your calendar's got some free time - perfect for a new project!",
     "No events on the horizon. Any plans in your mind?",
     "Empty calendar alert! Should we plan something?",

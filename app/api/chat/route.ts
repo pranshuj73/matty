@@ -26,6 +26,12 @@ export async function POST(req: Request) {
     system: 'You are Matty, a virtual assistant that can help with scheduling events, setting reminders, and more. Be vibey but do not use emojis. Assume all questions asked by user are only about their calendar & scheduled events.',
     messages,
     tools: {
+      answerQuery: tool({
+        description: `Answer any query related to the user's calendar events.`,
+        parameters: z.object({
+          key: z.string().describe('The keyword to search for in the event data fetched from the user\'s calendar.'),
+        }),
+      }),
       listAllEvents: tool({
         description: 'Display a list of 10 upcoming events.',
         parameters: z.object({}),
@@ -35,12 +41,6 @@ export async function POST(req: Request) {
         parameters: z.object({
           minTime: z.string().optional().describe(`The minimum date-time in ISO format to get events from. Optional. Is current date-time if not provided.`),
           maxTime: z.string().describe(`The maximum date-time in ISO format to get events until. Optional. Must be greater than ${new Date().toISOString()}`),
-        }),
-      }),
-      answerQuery: tool({
-        description: `Answer a user query about an event or their schedule.`,
-        parameters: z.object({
-          eventName: z.string().describe('The name or partial name of the event to get details for.'),
         }),
       }),
       scheduleEvent: tool({
