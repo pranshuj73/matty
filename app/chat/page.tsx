@@ -25,7 +25,8 @@ export default async function Page()  {
   let events: calendar_v3.Schema$Event[] = []
 
   try {
-    // const response = await fetchEvents(PROVIDER_TOKEN);
+    // events = await fetchEvents(PROVIDER_TOKEN);
+
     const response = await fetch(`${getURL()}/api/calendar/fetchEvents`, {
       method: 'POST',
       headers: {
@@ -33,8 +34,12 @@ export default async function Page()  {
       },
       body: JSON.stringify({ token: PROVIDER_TOKEN }),
     });
+
     if (!response.ok) { throw new Error('Network response was not ok'); }
-    events = await response.json();
+
+    const data = await response.json();
+
+    events = data.slice(0, 20);
   } catch (error) {
     console.error('Error fetching calendar events:', error);
   }

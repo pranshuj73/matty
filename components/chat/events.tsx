@@ -62,12 +62,13 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
 }
 
 export function EventItem(props: PropsWithChildren<{ event: FormattedEvent }>) {
+  console.log(props.event)
   return (
     <Tooltip key={props.event.id}>
       <TooltipTrigger className="flex flex-col my-2">
         <p><span className="text-sky-300">•</span> {props.event.summary}</p>
         <p className="opacity-50 text-xs">
-          {props.event.start.date} {props.event.start.time} • {timeUntilEvent(props.event.start.dateTime, props.event.end.dateTime)}
+          {props.event.start.date} {props.event.start.time} {props.event.start.timeZone} • {timeUntilEvent(props.event.start.dateTime, props.event.end.dateTime)}
         </p>
       </TooltipTrigger>
       <TooltipContent className="flex flex-col min-w-72 max-w-md gap-1" align="start" side="bottom">

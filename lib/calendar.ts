@@ -21,10 +21,8 @@ export type FormattedEvent = calendar_v3.Schema$Event & {
 };
 
 export function formatEvents(data: calendar_v3.Schema$Event[]) {
-  // if (!data) { return [] };
   const formattedEvents = data.map(event => {
     if (!event.start?.dateTime) {
-      // convert date to dateTime
       event.start!.dateTime = new Date(
         new Date(event.start!.date! + "T00:00:00").toLocaleString("en-US", { timeZone: event.start!.timeZone! })
       ).toISOString();
@@ -40,12 +38,12 @@ export function formatEvents(data: calendar_v3.Schema$Event[]) {
     const endDateObj = new Date(event.end!.dateTime!);
 
     // format startDateObj and endDateObj time in the format hh:mm in 24-hour time
-    const formattedStartTime = `${startDateObj.getHours().toString().padStart(2, '0')}:${startDateObj.getMinutes().toString().padStart(2, '0')}`;
-    const formattedEndTime = `${endDateObj.getHours().toString().padStart(2, '0')}:${endDateObj.getMinutes().toString().padStart(2, '0')}`;
+    const formattedStartTime = startDateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: event.start!.timeZone || 'UTC' });
+    const formattedEndTime = endDateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: event.end!.timeZone || 'UTC' });
 
     // format the start and end date in the format day dd month like Wed, 01 Jan
-    const formattedStartDate = startDateObj.toDateString().slice(0, 10);
-    const formattedEndDate = endDateObj.toDateString().slice(0, 10);
+    const formattedStartDate = startDateObj.toLocaleDateString('en-US', { weekday: 'short', day: '2-digit', month: 'short', timeZone: event.start!.timeZone || 'UTC' });
+    const formattedEndDate = endDateObj.toLocaleDateString('en-US', { weekday: 'short', day: '2-digit', month: 'short', timeZone: event.end!.timeZone || 'UTC' });
 
     return {
       ...event,
@@ -68,12 +66,12 @@ export function formatEvents(data: calendar_v3.Schema$Event[]) {
   return formattedEvents;
 }
 
-export async function fetchEvents(token: string, maxTime?: string, minTime?: string, timezone?: string) {
+export async function fetchEvents(token: string, maxTime?: string | undefined, minTime?: string | undefined) {
   try {
     const response = await fetch(`${getURL()}/api/calendar/fetchEvents`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', },
-      body: JSON.stringify({ token, minTime, maxTime, timezone }),
+      body: JSON.stringify({ token, minTime, maxTime }),
     });
     if (!response.ok) { throw new Error('Network response was not ok'); }
 

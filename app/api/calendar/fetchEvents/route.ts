@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: any) {
   try {
-    const { token, minTime, maxTime, timezone } = await request.json();
+    const { token, minTime, maxTime } = await request.json();
 
     if (!token || typeof token !== 'string') {
       return NextResponse.json({ error: 'Invalid token' }, { status: 400 });
@@ -30,12 +30,11 @@ export async function POST(request: any) {
       singleEvents: true,
       maxResults: 100,
       orderBy: 'startTime',
-      timeZone: (timezone && timezone.length !== 0) ? timezone : undefined,
     });
 
     const events = response.data.items || [];
 
-    return NextResponse.json(events);
+    return NextResponse.json(events, { status: 200 });
   } catch (error) {
     console.error('Error in Event Fetching POST handler:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

@@ -48,13 +48,12 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
 
         case 'listEventsWithinRange': {
           let { minTime, maxTime } = toolCall.args as ListEventsArgs;
-          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
           const offset = new Date().getTimezoneOffset();
           maxTime = maxTime ? updateTimezone(maxTime, offset) : undefined;
           minTime = minTime ? updateTimezone(minTime, offset) : undefined;
 
-          return fetchEvents(props.providerToken, maxTime, minTime, timezone);
+          return fetchEvents(props.providerToken, maxTime, minTime);
         }
 
         case 'answerQuery': {
