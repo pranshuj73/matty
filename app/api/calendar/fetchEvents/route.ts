@@ -9,9 +9,6 @@ export async function POST(request: any) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 400 });
     }
 
-    console.log(token, minTime, maxTime, timezone);
-    console.log(typeof token, typeof minTime, typeof maxTime, typeof timezone);
-
     const oauth = new google.auth.OAuth2({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,

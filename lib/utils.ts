@@ -9,20 +9,22 @@ export function timeUntilEvent(eventStart: string, eventEnd: string) {
   const startDiff = new Date(eventStart).getTime() - new Date().getTime();
   const endDiff = new Date(eventEnd).getTime() - new Date().getTime();
   if (startDiff < 0 && endDiff > 0) {
-      return "Ongoing Right Now";
+    return "Ongoing Right Now";
   }
   const eventEnded = endDiff < 0;
-  const differenceInMs = Math.abs(startDiff);
+  const differenceInMs = eventEnded ? Math.abs(endDiff): Math.abs(startDiff);
   const differenceInMinutes = Math.floor(differenceInMs / (1000 * 60));
   const differenceInHours = Math.floor(differenceInMs / (1000 * 60 * 60));
   const differenceInDays = Math.floor(differenceInHours / 24);
-  if (differenceInDays >= 1) {
-      return !eventEnded ? `In ${differenceInDays} Days` : `Ended ${differenceInDays} Days Ago`;
-  } else if (differenceInHours >= 1) {
-      return !eventEnded ? `In ${differenceInHours} Hours` : `Ended ${differenceInHours} Hours Ago`;
-  } else {
-      return !eventEnded ? `In ${differenceInMinutes} Minutes` : `Ended ${differenceInMinutes} Minutes Ago`;
+  
+  const displayTime = differenceInDays >= 1 ? differenceInDays : differenceInHours >= 1 ? differenceInHours : differenceInMinutes;
+  const displayUnit = differenceInDays >= 1 ? "Day" : differenceInHours >= 1 ? "Hour" : "Minute";
+  
+  if (eventEnded) {
+    return `Ended ${displayTime} ${displayUnit}${displayTime > 1 ? 's' : ''} Ago`;
   }
+
+  return `In ${displayTime} ${displayUnit}${displayTime > 1 ? 's' : ''}`;
 }
 
 export function updateTimezone(date: string, offset: number) {

@@ -35,7 +35,6 @@ export default async function Page()  {
     });
     if (!response.ok) { throw new Error('Network response was not ok'); }
     events = await response.json();
-    console.log(events);
   } catch (error) {
     console.error('Error fetching calendar events:', error);
   }
