@@ -3,8 +3,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { SendHorizonalIcon } from "lucide-react";
+import { PaperclipIcon, SendHorizonalIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const placeholders = [
   "What's my schedule for today?",
@@ -27,13 +28,20 @@ export function PlaceholdersInput({
   handleInputChange,
   handleSubmit,
   disabled,
+  fileInputRef,
+  files,
+  setFiles
 }: {
   value: string;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  disabled?: boolean;
+  disabled: boolean;
+  fileInputRef: React.RefObject<HTMLInputElement>;
+  files: FileList | undefined;
+  setFiles: React.Dispatch<React.SetStateAction<FileList | undefined>>;
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startAnimation = () => {
@@ -50,7 +58,21 @@ export function PlaceholdersInput({
     }
   };
 
+  const filterAndSetFiles = (files: FileList) => {
+    const dataTransfer = new DataTransfer();
+    // max file size 3 MB
+    const images = Array.from(files).slice(0, 5).filter(file => file.type.startsWith("image/") && file.size < 3 * 1024 * 1024);
+    images.forEach(file => dataTransfer.items.add(file));
+    setFiles(dataTransfer.files);
+  };
+
   useEffect(() => {
+    document.addEventListener('paste', e => {
+      if (e.clipboardData && e.clipboardData.files.length) {
+        filterAndSetFiles(e.clipboardData.files);
+      }
+    });
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !disabled) {
         inputRef.current?.focus();
@@ -80,7 +102,6 @@ export function PlaceholdersInput({
     };
   }, [placeholders]);
 
-  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <form
@@ -92,18 +113,44 @@ export function PlaceholdersInput({
       onSubmit={handleSubmit}
     >
       <input
+        type="file"
+        className="absolute w-0 h-0 hidden"
+        onChange={event => {
+          if (event.target.files) {
+            filterAndSetFiles(event.target.files);
+          }
+        }}
+        multiple
+        accept="image/*"
+        ref={fileInputRef}
+      />
+      <input
         onChange={handleInputChange}
         ref={inputRef}
         value={value}
         disabled={disabled}
         type="text"
-        className="w-full relative z-50 border-none dark:text-white bg-transparent text-black h-full rounded-md outline-none focus:outline-none ring-0 focus:ring-0 focus:bg-accent focus:border-white/20 transition-all duration-300 ease-in-out pl-4 sm:pl-5 pr-10"
+        className="w-full relative z-30 border-none dark:text-white bg-transparent text-black h-full rounded-md outline-none focus:outline-none ring-0 focus:ring-0 focus:bg-accent focus:border-white/20 transition-all duration-300 ease-in-out pl-11 pr-10"
       />
-
+      {/* attachment button */}
+      <Tooltip delayDuration={1500}>
+        <TooltipTrigger asChild>
+          <button
+            disabled={disabled}
+            onClick={() => fileInputRef.current?.click()}
+            type="button"
+            className="absolute left-0 top-1/2 z-30 -translate-y-1/2 h-10 w-12 opacity-50 group transition duration-200 flex items-center justify-center"
+          >
+            <PaperclipIcon size={18} />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent align="center">Attach up to 5 images (max 3MB each) as additional context.</TooltipContent>
+      </Tooltip>
+      {/* submit button */}
       <button
         disabled={!value || disabled}
         type="submit"
-        className="absolute right-0 top-1/2 z-50 -translate-y-1/2 h-10 w-12 disabled:opacity-50 group transition duration-200 flex items-center justify-center"
+        className="absolute right-0 top-1/2 z-30 -translate-y-1/2 h-10 w-12 disabled:opacity-50 group transition duration-200 flex items-center justify-center"
       >
         <SendHorizonalIcon size={18} />
       </button>
@@ -129,12 +176,12 @@ export function PlaceholdersInput({
                 duration: 0.3,
                 ease: "linear",
               }}
-              className="text-foreground/60 pl-4 sm:pl-5 pr-2 text-left w-[calc(100%-2rem)] truncate"
+              className="text-foreground/60 pl-11 pr-10 text-left w-full truncate"
             >
               {placeholders[currentPlaceholder]}
             </motion.p>
           )}
-          {disabled && (<p className="text-foreground/60 pl-2 sm:pl-5 text-left w-[calc(100%-2rem)] truncate">Say something...</p>)}
+          {disabled && (<p className="text-foreground/60 pl-11 pr-10 text-left w-full truncate">Say something...</p>)}
         </AnimatePresence>
       </div>
     </form>

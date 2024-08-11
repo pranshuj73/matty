@@ -62,7 +62,6 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
 }
 
 export function EventItem(props: PropsWithChildren<{ event: FormattedEvent }>) {
-  console.log(props.event)
   return (
     <Tooltip key={props.event.id}>
       <TooltipTrigger className="flex flex-col my-2">

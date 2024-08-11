@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { openai } from '@ai-sdk/openai';
-import { streamText, tool, StreamingTextResponse } from 'ai';
+import { streamText, tool, convertToCoreMessages } from 'ai';
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
@@ -23,8 +23,8 @@ export async function POST(req: Request) {
 
   const result = await streamText({
     model: openai('gpt-4o-mini'),
-    system: 'You are Matty, a virtual assistant that can help with scheduling events, setting reminders, and more. Be vibey but do not use emojis. Assume all questions asked by user are only about their calendar & scheduled events.',
-    messages,
+    system: 'You are Matty, a helpful assistant paired with the user\'s calendar that can help with scheduling events, setting reminders, discussing days or planning for it and more! Be vibey but do not use emojis. Assume all questions asked by user are only about their calendar & scheduled events. When passed an image, use data from image to schedule events or set reminders for the user. Do not ask user for any optional details (description, location, attendees) if not provided in the user message.',
+    messages: convertToCoreMessages(messages),
     tools: {
       answerQuery: tool({
         description: `Answer any query related to the user's calendar events.`,
