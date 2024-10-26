@@ -36,9 +36,8 @@ const genEmptyCalMessage = () => {
 }
 
 
-export default function Events({ events }: { events: calendar_v3.Schema$Event[] }) {
-  const formattedEvents = events && events.length !== 0 ? formatEvents(events.slice(0, 5)) : [];
-
+export default function Events({ events, displayTZ }: { events: calendar_v3.Schema$Event[], displayTZ?: string }) {
+  const formattedEvents = events && events.length !== 0 ? formatEvents(events.slice(0, 5), displayTZ) : [];
   const noUpcomingEventsMessage = genEmptyCalMessage();
 
   try {
@@ -47,9 +46,7 @@ export default function Events({ events }: { events: calendar_v3.Schema$Event[] 
         {(formattedEvents.length !== 0) ? <p>Here are your upcoming events:</p> : <p>{noUpcomingEventsMessage}</p>}
         {(formattedEvents.length !== 0) && (<ul>{formattedEvents.map(event => <EventItem key={event.id} event={event} />)}</ul>)}
         {(formattedEvents.length !== 0) && (<p className="mt-4">What would you like to do today?</p>)}
-        
       </div>
-      
     )
   } catch (error) {
     console.error(error)

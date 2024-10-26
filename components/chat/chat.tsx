@@ -11,6 +11,7 @@ import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
 
 import { fetchEvents, findEventByName, scheduleEvent } from '@/lib/calendar';
+import { toZonedTime } from 'date-fns-tz';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { PlaceholdersInput } from '@/components/magicternity/placeholders-input';
@@ -19,7 +20,6 @@ import Markdown from '@/components/chat/markdown';
 import Events, { EventItem } from '@/components/chat/events';
 import ChatNav from '@/components/chat/chat-nav';
 import TypingLoader from '@/components/chat/typing-loader';
-import { updateTimezone } from '@/lib/utils';
 import { Trash2Icon } from 'lucide-react';
 
 export default function Chat(props: PropsWithChildren<{ providerToken: string, user: User, credits: number }>) {
@@ -29,6 +29,9 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
 
   const [files, setFiles] = useState<FileList | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log("timezone", timezone);
 
   async function fetchCredits() {
     const { data: userData, error } = await supabase.from('users').select('credits').eq('id', props.user.id).single();
@@ -54,9 +57,8 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
         case 'listEventsWithinRange': {
           let { minTime, maxTime } = toolCall.args as ListEventsArgs;
 
-          const offset = new Date().getTimezoneOffset();
-          maxTime = maxTime ? updateTimezone(maxTime, offset) : undefined;
-          minTime = minTime ? updateTimezone(minTime, offset) : undefined;
+          maxTime = maxTime ? toZonedTime(maxTime, timezone).toDateString() : undefined;
+          minTime = minTime ? toZonedTime(minTime, timezone).toDateString() : undefined;
 
           return fetchEvents(props.providerToken, maxTime, minTime);
         }
@@ -69,9 +71,13 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
           }
         }
 
+        case 'getCurrentTime': {
+          return toZonedTime(new Date().toISOString(), timezone).toDateString();
+        }
+
         case 'scheduleEvent': {
           const { summary, description, location, attendees, eventStartDateTime, eventEndDateTime } = toolCall.args as { summary: string, eventStartDateTime: string, eventEndDateTime: string, description?: string, location?: string, attendees?: string };
-          const response = await scheduleEvent(props.providerToken, summary, eventStartDateTime, eventEndDateTime, Intl.DateTimeFormat().resolvedOptions().timeZone, description, location, attendees);
+          const response = await scheduleEvent(props.providerToken, summary, eventStartDateTime, eventEndDateTime, timezone, description, location, attendees);
           return response;
         }
 
@@ -175,7 +181,6 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
                 }
               }
 
-              // console.log('toolInvocation', toolInvocation);
               return <p>Something unexpected happened, please try resending the message...</p>
             })}
 
@@ -210,3 +215,4 @@ export default function Chat(props: PropsWithChildren<{ providerToken: string, u
     </section>
   );
 }
+

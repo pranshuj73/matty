@@ -27,16 +27,6 @@ export function timeUntilEvent(eventStart: string, eventEnd: string) {
   return `In ${displayTime} ${displayUnit}${displayTime > 1 ? 's' : ''}`;
 }
 
-export function updateTimezone(date: string, offset: number) {
-  const padNum = (num: number) => num.toString().padStart(2, '0');
-
-  const clockTime = date.replace(/Z$/, '');
-  const hour = padNum(Math.floor(Math.abs(offset) / 60));
-  const minute = padNum(Math.abs(offset) % 60);
-  const dif = -offset >= 0 ? '+' : '-';
-  return `${clockTime}${dif}${hour}:${minute}`;
-}
-
 export const getURL = () => {
   let url =
     process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.

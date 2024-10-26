@@ -2,6 +2,7 @@ import { calendar_v3, google } from "googleapis";
 import Fuse from 'fuse.js';
 import { createOpenAI } from "@ai-sdk/openai"
 import { getURL } from "@/lib/utils"
+import { format } from "date-fns-tz";
 
 const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -20,31 +21,36 @@ export type FormattedEvent = calendar_v3.Schema$Event & {
   };
 };
 
-export function formatEvents(data: calendar_v3.Schema$Event[]) {
+export function formatEvents(data: calendar_v3.Schema$Event[], displayTZ?: string) {
+  console.log("displayTZ", displayTZ);
+  if (!displayTZ) {
+    displayTZ = "UTC";
+  }
+
+  // TODO: Fix the timezone issue
   const formattedEvents = data.map(event => {
-    if (!event.start?.dateTime) {
-      event.start!.dateTime = new Date(
-        new Date(event.start!.date! + "T00:00:00").toLocaleString("en-US", { timeZone: event.start!.timeZone! })
-      ).toISOString();
+    if (!event.start) { event.start = {} };
+    if (!event.end) { event.end = {} };
+
+    if (!event.start.dateTime) {
+      event.start.dateTime = new Date(event.start.date! + "T00:00:00").toLocaleString("en-US", { timeZone: displayTZ || event.start.timeZone! });
     }
 
-    if (!event.end?.dateTime) {
-      event.end!.dateTime = new Date(
-        new Date(event.end!.date! + "T23:59:59").toLocaleString("en-US", { timeZone: event.end!.timeZone! })
-      ).toISOString();
+    if (!event.end.dateTime) {
+      event.end.dateTime = new Date(event.end!.date! + "T23:59:59").toLocaleString("en-US", { timeZone: displayTZ || event.end!.timeZone! });
     }
     
     const startDateObj = new Date(event.start!.dateTime!);
     const endDateObj = new Date(event.end!.dateTime!);
 
-    // format startDateObj and endDateObj time in the format hh:mm in 24-hour time
-    const formattedStartTime = startDateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: event.start!.timeZone || 'UTC' });
-    const formattedEndTime = endDateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: event.end!.timeZone || 'UTC' });
+    const formattedStartTime = format(startDateObj, 'HH:mm', { timeZone: displayTZ || event.start!.timeZone || 'UTC' });
+    const formattedEndTime = format(endDateObj, 'HH:mm', { timeZone: displayTZ || event.end!.timeZone || 'UTC' });
+
 
     // format the start and end date in the format day dd month like Wed, 01 Jan
-    const formattedStartDate = startDateObj.toLocaleDateString('en-US', { weekday: 'short', day: '2-digit', month: 'short', timeZone: event.start!.timeZone || 'UTC' });
-    const formattedEndDate = endDateObj.toLocaleDateString('en-US', { weekday: 'short', day: '2-digit', month: 'short', timeZone: event.end!.timeZone || 'UTC' });
-
+    const formattedStartDate = format(startDateObj, 'EEE, MMM dd', { timeZone: displayTZ || event.start!.timeZone || 'UTC' });
+    const formattedEndDate = format(endDateObj, 'EEE, MMM dd', { timeZone: displayTZ || event.end!.timeZone || 'UTC' });
+    
     return {
       ...event,
       "summary": event.summary ? event.summary : "Untitled Event",
