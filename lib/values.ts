@@ -1,4 +1,4 @@
-export const DISCORD_URL = "https://discord.gg/xEqKpkvEuB";
+export const DISCORD_URL = "https://discord.gg/Rjj7TCy9Td";
 
 export const PRIMARY_BTN_URL = "/chat";
 
